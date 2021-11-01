@@ -1,0 +1,38 @@
+Dutch name	Database name	ID	Pyr/Pur	0y-1y L	0y-1y U	1y-5y L	1y-5y U	5y-16y L	5y-16y U	16y+ L	16y+ U	0y-16y L	0y-16y U
+orotidine	Orotidine	CHEBI:25722	Y	0	13.4	0	7	0	3	0	4		
+orootzuur	Orotate	CHEBI:30839	Y			0	4			0	3	0	4
+uracil	Uracil	CHEBI:17568	Y	0	39	0	36	0	18.6	0	16.2		
+5-OH-methyluracil	5-OH-Methyluracil	CHEBI:16964	Y			0	4			0	2	0	4
+pseudo uridine	Pseudouridine	CHEBI:65314	Y	49	268.6	28	154	18	85.6	11	65		
+2,8-dihydroxyadenine	2,8-Dihydroxyadenine	Q4596812	U			0	4			0	3	0	4
+urinezuur	Urate	CHEBI:17775	U	537.8	2289.2	281.3	1579.5	157	820.8	96.6	578		
+hypoxanthine	Hypoxanthine	CHEBI:17368	U	2	57.4	4	56.6	2	31	0.8	14		
+xanthine	Xanthine	CHEBI:17712	U	2	51.4	6	41	1.4	22	0	14.2		
+uridine	Uridine	CHEBI:16704	Y			0	3			0	3	0	3
+adenine	Adenine	CHEBI:16708	U			0	4			0	4	0	4
+thymine	Thymine	CHEBI:17821	Y			0	3			0	2	0	3
+deoxyuridine	2-Deoxyuridine	CHEBI:16450	Y			0	1			0	1	0	1
+inosine	Inosine	CHEBI:17596	U	0	4	0	2	0	1	0	1		
+guanosine	Guanosine	CHEBI:16750	U			0	1			0	0	0	1
+deoxyguanosine	2-Deoxyguanosine	CHEBI:17172	U			0	0			0	0	0	0
+deoxyinosine	2'-Deoxyinosine	CHEBI:28997	U			0	1			0	0	0	1
+thymidine	Thymidine	CHEBI:17748	Y			0	1			0	1	0	1
+SADO	Succinyladenosine	CHEBI:71169	U	0	21	0	13	0	7	0	4		
+adenosine	Adenosine	CHEBI:16335	U			0	2			0	1	0	2
+deoxyadenosine	2'-Deoxyadenosine	CHEBI:17256	U			0	1			0	0	0	0.625
+dihydro-orootzuur	Dihydroorotate	CHEBI:30864	Y			0	5			0	3	0	5
+N-carbamyl-beta-alanine	N-Carbamoyl-beta-alanine	CHEBI:11892	Y	0	45	0	16	0	13	0	9		
+dihydro-uracil	Dihydrouracil	CHEBI:15901	Y	0	17.5	0	10	0	6	0	7.48		
+SAICAR	SAICARP	CHEBI:18319	U			0	1			0	0.5	0	1
+N-carbamyl-beta-AIBA	N-Carbamyl-beta-aminoisobutyric acid	CHEBI:74414	Y	0	17	0	6	0	3	0	3		
+AICAR	AICARP	CHEBI:18406	U			0	2			0	1	0	2
+dihydrothymine	Dihydrothymine	CHEBI:27468	Y	0	8	0	4	0	3	0	3		
+oxypurinol	Oxypurinol	CHEBI:28315	U										
+allopurinol	Allopurinol	CHEBI:40279	U										
+cytidine	cytidine	CHEBI:17562											
+N-carbamyl-aspartaat	N-carbamoyl-L-aspartate(2-)	CHEBI:32814											
+5-hydroxy methyl uracil	5-(Hydroxymethyl)uracil	CHEBI:16964								0	2	0	4
+SADO succinyl adenosine	succinyladenosine	CHEBI:71169		0	21	0	13	0	7	0	4		
+allantoine	allantoin	CHEBI:15676											
+N-carbamyl-bala	n-carbamoyl-beta-alanine	CHEBI:18261											
+cytosine	cytosine	CHEBI:16040											

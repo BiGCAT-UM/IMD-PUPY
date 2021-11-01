@@ -1,0 +1,80 @@
+Disorder 	OMIM	IEM ID	Test panel	Symptom	Measured in	HMDB	Uniprot ID	Mapping ChEBI	Neonatal (birth-1mth)	Infancy (1-18mths)	Childhood (1.5-11yrs)	Adolescence (11-16yrs)	Adulthood (>16yrs)	Present in pathway	Characteristic for disorder	Protein_HGNC_name
+Thiopurine S-methyltransferase deficiency	https://omim.org/601465	IEMBASE151	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	TPMT
+Phosphoribosylpyrophosphate synthetase 1 defects	https://omim.org/311850	IEMBASE147	Enzyme testing	Phosphoribosyl pyrophosphate synthetase activity	NA	NA	NA	NA	-3 to -1	-3 to -1	-3 to -1	-3 to -1	-3 to -1	NA	1	PRPPS
+Phosphoribosyl pyrophosphate synthetase 1 superactivity	https://omim.org/300661	IEMBASE362	Enzyme testing	Phosporibose pyrophosphate	Ec	NA		NA	1	1	1	1	1	NA	0	PRPS1
+Phosphoribosyl pyrophosphate synthetase 1 superactivity	https://omim.org/300661	IEMBASE362	Enzyme testing	Phosporibose pyrophosphate	Ec	NA		NA	1	1	1	1	1	NA	0	PRPS1
+Phosphoribosyl pyrophosphate synthetase 1 superactivity	https://omim.org/300661	IEMBASE362	Enzyme testing	PRPP synthase activity	FB	NA		NA	1	1	1	1	1	NA	0	PRPS1
+Phosphoribosyl pyrophosphate synthetase 1 superactivity	https://omim.org/300661	IEMBASE362	Purines and Pyrimidines	Hypoxanthine	U	HMDB00157	NA		1	1	1	1	1	NA	1	PRPS1
+Phosphoribosyl pyrophosphate synthetase 1 superactivity	https://omim.org/300661	IEMBASE362	Routine tests	Uric acid	P	HMDB00289	NA		n to 1	n to 1	 n to 1	2	2	NA	1	PRPS1
+Phosphoribosyl pyrophosphate synthetase 1 superactivity	https://omim.org/300661	IEMBASE362	Routine tests	Uric acid	U	HMDB00289	NA		2	2	2	2	2	NA	1	PRPS1
+Xanthinuria, Type II	https://omim.org/603592	IEMBASE867	Purines and Pyrimidines	Hypoxanthine	P	HMDB00157			1	1	1	1	1		1	XAN2
+Xanthinuria, Type II	https://omim.org/603592	IEMBASE867	Purines and Pyrimidines	Hypoxanthine	U	HMDB00157			2	2	2	2	2		1	XAN2
+Xanthinuria, Type II	https://omim.org/603592	IEMBASE867	Purines and Pyrimidines	Xanthine	P	HMDB00292			1	1	1	1	1		1	XAN2
+Xanthinuria, Type II	https://omim.org/603592	IEMBASE867	Purines and Pyrimidines	Xanthine	U	HMDB00292			2	2	2	2	2		1	XAN2
+Xanthinuria, Type II	https://omim.org/603592	IEMBASE867	Routine tests	Uric acid	P	HMDB00289			-2	-2	-2	-3	-2		1	XAN2
+Xanthinuria, Type II	https://omim.org/603592	IEMBASE867	Routine tests	Uric acid	U	HMDB00289			-2	-2	-2	-3	-2		1	XAN2
+Adenyl- succinate  lyase deficiency	https://omim.org/103050	IEMBASE140	Enzyme testing	Adenylosuccinate lyase	Ec	NA			-3	-3	-3	-3	-3		0	ADSL
+Adenyl- succinate  lyase deficiency	https://omim.org/103050	IEMBASE140	Purines and Pyrimidines	SAICA riboside	CSF	HMDB0000797			2	2	2	2	2		1	ADSL
+Adenyl- succinate  lyase deficiency	https://omim.org/103050	IEMBASE140	Purines and Pyrimidines	SAICA riboside	P	HMDB0000797			1	1	1	1	1		1	ADSL
+Adenyl- succinate  lyase deficiency	https://omim.org/103050	IEMBASE140	Purines and Pyrimidines	SAICA riboside	U	HMDB0000797			2	2	2	2	2		1	ADSL
+Adenyl- succinate  lyase deficiency	https://omim.org/103050	IEMBASE140	Purines and Pyrimidines	Succinyladenosine	CSF	HMDB00912			2	2	2	2	2		1	ADSL
+Adenyl- succinate  lyase deficiency	https://omim.org/103050	IEMBASE140	Purines and Pyrimidines	Succinyladenosine	P	HMDB00912			2	2	2	2	2		1	ADSL
+Adenyl- succinate  lyase deficiency	https://omim.org/103050	IEMBASE140	Purines and Pyrimidines	Succinyladenosine	U	HMDB00912			2	2	2	2	2		1	ADSL
+AICAr transformylase/IMP cyclohydrolase deficiency	https://omim.org/608688	IEMBASE141	Enzyme testing	AICAR transformylase/IMP cyclohydrolase	FB	NA			-3	-3	-3	-3	-3		0	ATIC
+AICAr transformylase/IMP cyclohydrolase deficiency	https://omim.org/608688	IEMBASE141	Purines and Pyrimidines	AICA riboside	U	HMDB62179			3	3	3	NA	NA		1	ATIC
+Mitochondrial ribonucleotide reductase subunit 2 deficiency	https://omim.org/604712	IEMBASE150	Routine tests	Lactate	CSF	HMDB0001311			1	1	NA	NA	1		1	RRM2B
+Mitochondrial ribonucleotide reductase subunit 2 deficiency	https://omim.org/604712	IEMBASE150	Routine tests	Lactate	P	HMDB0001311			1	1	NA	NA	1		1	RRM2B
+Mitochondrial ribonucleotide reductase subunit 2 deficiency	https://omim.org/604712	IEMBASE150	Specifc tests	Histochemical cytochrome c oxidase deficiency	Mu	NA			1	1	NA	NA	1		1	RRM2B
+Mitochondrial ribonucleotide reductase subunit 2 deficiency	https://omim.org/604712	IEMBASE150	Specifc tests	Histochemical mitochondrial proliferation	Mu	NA			1	1	NA	NA	1		1	RRM2B
+Inosine triphosphatase deficiency	https://omim.org/146690	IEMBASE1384	Enzyme testing	Enzyme activity	FB, RBC	NA			-2 to n	-2 to n	-2 to n	-2 to n	-2 to n		0	ITPA
+IMP dehydrogenase deficiency	https://omim.org/146690	IEMBASE363	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	IMPDH1
+Adenine phosphoribosyltransferase deficiency	https://omim.org/614723	IEMBASE146	Enzyme testing	Adenine phosphoribosyl transferase	Ec	NA			-2	-2	-2	-2	-2		0	APRT
+Adenine phosphoribosyltransferase deficiency	https://omim.org/614723	IEMBASE146	Purines and Pyrimidines	2,8-Dihydroxyadenine	U	HMDB00401			2	2	2	2	2		1	APRT
+Adenine phosphoribosyltransferase deficiency	https://omim.org/614723	IEMBASE146	Purines and Pyrimidines	Adenine	U	HMDB00034			1	1	1	1	1		1	APRT
+AMP deaminase deficiency	https://omim.org/102770	IEMBASE144	Enzyme testing	Creatine kinase	P	NA			NA	NA	1	1	1		1	AMPD1
+AMP deaminase deficiency	https://omim.org/102770	IEMBASE144	Enzyme testing	Adenosine monophosphate deaminase	muscle biopsy	NA			NA	NA	-1	-1	-1		0	AMPD1
+AMP deaminase deficiency	https://omim.org/102770	IEMBASE144	Functional testing	Ischaemic muscle exercise tolerance test	plasma NH3	NA			NA	NA	-1	-1	-1		1	AMPD1
+Lesch-Nyhan syndrome	https://omim.org/300322	IEMBASE145	Enzyme testing	Hypoxanthine guanine phosphoribosyltransferase	Ec	NA			-3	-3	-3	-3	-3		1	HPRT1
+Lesch-Nyhan syndrome	https://omim.org/300322	IEMBASE145	Purines and Pyrimidines	AICA riboside	U	HMDB62179			NA	1	1	1	1		1	HPRT1
+Lesch-Nyhan syndrome	https://omim.org/300322	IEMBASE145	Purines and Pyrimidines	Hypoxanthine	P	HMDB00157			1	1	1	1	1		1	HPRT1
+Lesch-Nyhan syndrome	https://omim.org/300322	IEMBASE145	Purines and Pyrimidines	Hypoxanthine	U	HMDB00157			2	2	2	2	2		1	HPRT1
+Lesch-Nyhan syndrome	https://omim.org/300322	IEMBASE145	Purines and Pyrimidines	Xanthine	U	HMDB00292			1	1	1	1	1		1	HPRT1
+Lesch-Nyhan syndrome	https://omim.org/300322	IEMBASE145	Routine tests	Uric acid	P	HMDB00289			2	2	2	2	2		1	HPRT1
+Lesch-Nyhan syndrome	https://omim.org/300322	IEMBASE145	Routine tests	Uric acid	U	HMDB00289			3	3	3	2	2		1	HPRT1
+Adenosine deaminase deficiency	https://omim.org/102700	IEMBASE142	Enzyme testing	Adenosine deaminase	Ec	NA			-3	-3	-3	-3	-3		1	ADA
+Adenosine deaminase deficiency	https://omim.org/102700	IEMBASE142	Purines and Pyrimidines	Deoxyadenosine triphosphate, dATP	Ec	HMDB0001532			3	2	2	2	1		1	ADA
+Adenosine deaminase deficiency	https://omim.org/102700	IEMBASE142	Purines and Pyrimidines	Deoxyadenosine	U	HMDB00101			2	2	2	2	1		1	ADA
+Adenosine deaminase deficiency	https://omim.org/102700	IEMBASE142	Specifc tests	Immunoglobulins	NA	NA			-3	-2	-1	-1	-1		1	ADA
+Kelley-Seegmiller syndrome	https://omim.org/300323	IEMBASE145	Enzyme testing	Hypoxanthine guanine phosphoribosyltransferase	Ec	NA			-3	-3	-3	-3	-3		1	HPRT1_less
+Kelley-Seegmiller syndrome	https://omim.org/300323	IEMBASE145	Purines and Pyrimidines	AICA riboside	U	HMDB62179			NA	1	1	1	1		1	HPRT1_less
+Kelley-Seegmiller syndrome	https://omim.org/300323	IEMBASE145	Purines and Pyrimidines	Hypoxanthine	P	HMDB00157			1	1	1	1	1		1	HPRT1_less
+Kelley-Seegmiller syndrome	https://omim.org/300323	IEMBASE145	Purines and Pyrimidines	Hypoxanthine	U	HMDB00157			2	2	2	2	2		1	HPRT1_less
+Kelley-Seegmiller syndrome	https://omim.org/300323	IEMBASE145	Purines and Pyrimidines	Xanthine	U	HMDB00292			1	1	1	1	1		1	HPRT1_less
+Kelley-Seegmiller syndrome	https://omim.org/300323	IEMBASE145	Routine tests	Uric acid	P	HMDB00289			2	2	2	2	2		1	HPRT1_less
+Kelley-Seegmiller syndrome	https://omim.org/300323	IEMBASE145	Routine tests	Uric acid	U	HMDB00289			3	3	3	2	2		1	HPRT1_less
+Purine nucleoside phosphorylase deficiency	https://omim.org/613179	IEMBASE149	Enzyme testing	Purine nucleoside phosphorylase	Ec	NA			-3	-2	-3	-3	-3		1	PNP
+Purine nucleoside phosphorylase deficiency	https://omim.org/613179	IEMBASE149	Purines and Pyrimidines	Purine nucleoside phosphorylase	P	HMDB0000085			1	1	1	1	1		1	PNP
+Purine nucleoside phosphorylase deficiency	https://omim.org/613179	IEMBASE149	Purines and Pyrimidines	Purine nucleoside phosphorylase	U	HMDB0000085			2	2	2	1	1		1	PNP
+Purine nucleoside phosphorylase deficiency	https://omim.org/613179	IEMBASE149	Purines and Pyrimidines	Deoxyinosine, dIno	P	HMDB0000071			1	1	1	1	1		1	PNP
+Purine nucleoside phosphorylase deficiency	https://omim.org/613179	IEMBASE149	Purines and Pyrimidines	Deoxyinosine, dIno	U	HMDB0000071			2	2	2	1	1		1	PNP
+Purine nucleoside phosphorylase deficiency	https://omim.org/613179	IEMBASE149	Routine tests	Uric acid	P	HMDB00289			-2 to -1	-2 to -1	-2 to -1	-1	-1		1	PNP
+Purine nucleoside phosphorylase deficiency	https://omim.org/613179	IEMBASE149	Routine tests	Uric acid	U	HMDB00289			-2 to -1	-2 to -1	-2 to -1	-1	-1		1	PNP
+Xanthinuria, Type I	https://omim.org/278300	IEMBASE364	Purines and Pyrimidines	Hypoxanthine	P	HMDB00157			1	1	1	1	1		1	XO
+Xanthinuria, Type I	https://omim.org/278300	IEMBASE364	Purines and Pyrimidines	Hypoxanthine	P	HMDB00157			2	2	2	2	2		1	XO
+Xanthinuria, Type I	https://omim.org/278300	IEMBASE364	Purines and Pyrimidines	Xanthine	P	HMDB00292			1	1	1	1	1		1	XO
+Xanthinuria, Type I	https://omim.org/278300	IEMBASE364	Purines and Pyrimidines	Xanthine	U	HMDB00292			2	2	2	2	2		1	XO
+Xanthinuria, Type I	https://omim.org/278300	IEMBASE364	Routine tests	Uric acid	P	HMDB00289			-2 to -1	-2 to -1	-2 to -1	-2 to -1	-2 to -1		1	XO
+Xanthinuria, Type I	https://omim.org/278300	IEMBASE364	Routine tests	Uric acid	U	HMDB00289			-2 to -1	-2 to -1	-2 to -1	-2 to -1	-2 to -1		1	XO
+Deoxyguanosine kinase deficiency	https://omim.org/601465	IEMBASE143	Amino acid	Cystathionine	P	HMDB00099			NA	+-	NA	NA	NA		0	DGUOK
+Deoxyguanosine kinase deficiency	https://omim.org/601465	IEMBASE143	Amino acid	Phenylalanine	P	HMDB00159			1	1	NA	NA	NA		0	DGUOK
+Deoxyguanosine kinase deficiency	https://omim.org/601465	IEMBASE143	Amino acid	Tyrosine	P	HMDB00158			1	1	NA	NA	NA		0	DGUOK
+Deoxyguanosine kinase deficiency	https://omim.org/601465	IEMBASE143	Enzyme testing	Activity respiratory chain complexes (I, III, IV, and V)	NA	NA			-3	-3	-2	NA	NA		1	DGUOK
+Deoxyguanosine kinase deficiency	https://omim.org/601465	IEMBASE143	Enzyme testing	Gamma-glutamyl transpeptidase, GGT	P	NA			2	2	NA	NA	NA		1	DGUOK
+Deoxyguanosine kinase deficiency	https://omim.org/601465	IEMBASE143	Enzyme testing	Transaminase	P	NA			2	2	NA	NA	NA		0	DGUOK
+Deoxyguanosine kinase deficiency	https://omim.org/601465	IEMBASE143	Organic acids	Succinylacetone	U	HMDB00635			n to 1	n to 1	NA	NA	NA		0	DGUOK
+Deoxyguanosine kinase deficiency	https://omim.org/601465	IEMBASE143	Routine tests	Alpha-fetoprotein	S	NA			2	2	NA	NA	NA		1	DGUOK
+Deoxyguanosine kinase deficiency	https://omim.org/601465	IEMBASE143	Routine tests	Glucose	P	HMDB0000122			-3	-3	-1	NA	NA		1	DGUOK
+Deoxyguanosine kinase deficiency	https://omim.org/601465	IEMBASE143	Routine tests	Lactate	P	HMDB0001311			2	2	NA	NA	NA		1	DGUOK
+Deoxyguanosine kinase deficiency	https://omim.org/601465	IEMBASE143	Routine tests	Ferritin	S	HMDBP08672 HMDBP02077 HMDBP00470			2	2	NA	NA	NA		0	DGUOK
+Deoxyguanosine kinase deficiency	https://omim.org/601465	IEMBASE143	Routine tests	Lactate	CSF	HMDB0001311			2	2	NA	NA	NA		0	DGUOK
+Deoxyguanosine kinase deficiency	https://omim.org/601465	IEMBASE143	Specifc tests	Histochemical cytochrome c oxidase deficiency	Mu	NA			NA	NA	NA	NA	1		0	DGUOK

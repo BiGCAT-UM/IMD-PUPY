@@ -1,0 +1,1093 @@
+---
+title: "Systems Biology framework using metabolic markers and pathways to support the diagnosis of Purine and Pyrimidine Inherited Metabolic Disorders"
+output: html_notebook
+# Authors
+person("Denise", "Slenter", email = "denise.slenter@maastrichtuniversity.nl, GitHub: DeniseSl22",
+       role = "aut")
+person("Irene", "Hemel", email = "i.hemel@maastrichtuniversity.nl, GitHub: IreneHemel",
+       role = "ctb")
+---
+
+# 2.1 Workflow Introduction 
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+```{r setup, include=FALSE}
+if(!"rmarkdown" %in% installed.packages()){
+  install.packages("rmarkdown")
+}
+library(rmarkdown)
+if(!"dplyr" %in% installed.packages()){
+  install.packages("dplyr")
+}
+library(dplyr)
+
+##Setting working directory to local github file for Linux (note: you probably need to change the file path, if you run this workflow on a Windows machine):
+knitr::opts_chunk$set(echo = TRUE)
+#setwd("~/git/IMD")
+knitr::opts_knit$set(root.dir = "~/git/IMD")
+```
+
+Check if the working directory is the top folder of the repository (called IMD)
+```{r}
+getwd()
+```
+# 2.2 Clinical Biomarker Data
+
+### Loading patient specific data
+Note: this step requires input from the user, to select data from another patient as the example (QTOF_KV_184).
+```{r}
+## Load data for all patients
+patientdata <- read.csv("Data/Data_PuPyMS_QTOF_KV_BIGCAT.csv")
+
+##Select Patient ID here (options: A through T)
+patientID <- "I" ## patients B, C, P and Q do not have data on the AA panel
+#if value for age is not numeric (e.g. "newborn", sample: QTOF_KV_112, don't perform as.numeric.)
+if(grepl("^[A-Za-z]+$", patientdata[1,patientID], perl = T)){
+  print("Warning: Non-numeric age value is part of data")
+  if(patientdata[1,patientID] == "newborn"){
+    age <- as.numeric(0)
+  }
+  else{print("Warning: name for age value not recognized")}
+}else{
+    age <- as.numeric(patientdata[1,patientID])
+  }
+## Note there is a difference in the age categories between the two assays
+
+##PUPY: (age in years)
+if(age >= 0 && age < 12){
+  ref_age_PUPY = c(5,6)  #age_0to1y
+  agerange <- "0 to 1 years"
+  }else if(age >= 12 && age < 60){
+  ref_age_PUPY  = c(7,8) #age_1to5y
+  agerange <- "1 to 5 years"
+  }else if(age >= 60 && age < 192){
+  ref_age_PUPY  = c(9,10) #age_5to16y
+  agerange <- "5 to 16 years"
+  }else if(age >= 192){
+  ref_age_PUPY = c(11,12) #age_16yandUp
+  agerange <- "16+ years"
+  }else{
+    ref_age_PUPY = c(13,14) #age_0to16
+    agerange <- "0 to 16 years"
+    }
+
+##Urea: (age in months = m, in years = y)
+if(age >= 0 && age < 1){
+  ref_age_urea = c(4,5) #age_0to1m
+  }else if(age >= 1 && age < 6){
+  ref_age_urea = c(6,7) #age_1to6m
+  }else if(age >= 6 && age < 12){
+  ref_age_urea = c(8,9) #age_6mto1y
+  }else if(age >= 12 && age < 24){
+  ref_age_urea = c(10,11) #age_1to2y
+  }else if(age >= 24 && age < 48){
+  ref_age_urea = c(12,13) #age_2-4y
+  }else if(age >= 48 && age < 120){
+  ref_age_urea = c(14,15) #age_4-10y
+  }else if(age >= 120 && age < 216){
+  ref_age_urea = c(16,17) #age_10-18y
+  }else{
+    ref_age_urea = c(18,19) #age_18yandUp
+    }
+
+print(paste("Selected Patient ID is: " , patientID, ", age is between: ", agerange, " old"))
+
+```
+### Combine Reference + Patient data for each assay seperatly
+```{r}
+#Load reference data (includes annotations for biomarkers)
+refvalues_PUPY <- read.delim("Data/Reference_values_PUPY_noNAs.txt")
+refvalues_urea <- read.delim("Data/Reference_values_Urea.txt")
+
+# Select column based on patientID:
+patient.column <- as.integer(match(patientID,names(patientdata)))
+
+##Select Referencedata for one patient 
+patientID_PUPY <- as.data.frame(patientdata[4:37, c(1,patient.column)],  drop=false) #Selecting data for PUPY only
+patientID_urea <- as.data.frame(patientdata[42:95, c(1,patient.column)],  drop=false) #Selecting data for Urea Acids (including Amino Acids) only
+
+## Choose correct reference value column for further data visualization
+age_patientID_PUPY <- as.data.frame(refvalues_PUPY[ , c(1:3, ref_age_PUPY[1], ref_age_PUPY[2], 15 )],  drop=false) #Selecting reference data for PUPY, age: 0 to 1 year
+remove(refvalues_PUPY,ref_age_PUPY)
+age_patientID_urea <- as.data.frame(refvalues_urea[ , c(1:3, ref_age_urea[1], ref_age_urea[2], 20 )],  drop=false) #Selecting reference data for Urea, age: 0 to 1 month
+remove(refvalues_urea,ref_age_urea)
+remove(patient.column)
+
+print(paste("Relevant age data is selected for patient: " , patientID))
+
+```
+# 2.3 Pathway Models
+Retrieve Metabolite, Protein and Disease Data from Pathway Models
+```{r}
+
+if(!"SPARQL" %in% installed.packages()){
+  install.packages("SPARQL")
+}
+library(SPARQL)
+
+##Connect to Endpoint WikiPathways
+endpointwp <- "https://sparql.wikipathways.org/sparql"
+
+## 1. Query metadata:
+
+queryMetadata <-
+"SELECT DISTINCT ?dataset (str(?titleLit) as ?title) ?date ?license 
+WHERE {
+   ?dataset a void:Dataset ;
+   dcterms:title ?titleLit ;
+   dcterms:license ?license ;
+   pav:createdOn ?date .
+ }"
+
+resultsMetadata <- SPARQL(endpointwp,queryMetadata,curl_args=list(useragent=R.version.string))
+showresultsMetadata <- resultsMetadata$results
+remove(queryMetadata, resultsMetadata)
+
+## 2. Query Pathway data:
+
+##TODO: add biomarker models IDs!
+queryDatanodeContent <-
+"
+select distinct (str(?wpid) as ?pathway) (str(?title) as ?pathwayTitle) (count(distinct ?hgncIdProtein) AS ?ProteinsInPWs) (count(distinct ?chebiMetabolite) AS ?MetabolitesInPWs)
+where {
+VALUES ?wpid {\'WP4224\'^^xsd:string \'WP4225\'^^xsd:string \'WP4571\'^^xsd:string \'WP4595\'^^xsd:string \'WP4583\'^^xsd:string \'WP4584\'^^xsd:string}
+  ?datanode dcterms:identifier ?id ;
+    dcterms:isPartOf ?pathwayRes .
+  ?pathwayRes a wp:Pathway ;
+    dcterms:identifier ?wpid ;
+    dc:title ?title .
+  
+  {?datanode a wp:Protein ;          
+            wp:bdbHgncSymbol ?hgncIdProtein .}
+  UNION
+  {?datanode a wp:Metabolite ;          
+            wp:bdbChEBI ?chebiMetabolite .}
+  
+} ORDER BY ASC(?wpid)
+
+"
+
+resultsDatanodeContent <- SPARQL(endpointwp,queryDatanodeContent,curl_args=list(useragent=R.version.string))
+showresultsDatanodeContent <- resultsDatanodeContent$results
+remove(queryDatanodeContent, resultsDatanodeContent)
+
+## 3. Query interaction IDs
+
+queryInteractionContent <-
+  "select distinct (str(?wpid) as ?pathway) (str(?title) as ?pathwayTitle) (count(distinct ?rheaIdInteraction) AS ?InteractionsInPWs)
+where {
+VALUES ?wpid {\'WP4224\'^^xsd:string \'WP4225\'^^xsd:string \'WP4571\'^^xsd:string \'WP4595\'^^xsd:string \'WP4583\'^^xsd:string \'WP4584\'^^xsd:string}
+  ?interaction dcterms:identifier ?id ;
+    dcterms:isPartOf ?pathwayRes .
+  ?pathwayRes a wp:Pathway ;
+    dcterms:identifier ?wpid ;
+    dc:title ?title .
+  
+  {?interaction a wp:Interaction ;          
+            wp:bdbRhea ?rheaIdInteraction .}
+  
+} ORDER BY ASC(?wpid)"
+
+resultsInteractionContent <- SPARQL(endpointwp,queryInteractionContent,curl_args=list(useragent=R.version.string))
+showresultsInteractionContent <- resultsInteractionContent$results
+remove(queryInteractionContent, resultsInteractionContent)
+
+## 4. Query disease Datanodes 
+### Note: revision numbers might need updating, when query does not provide results.
+
+queryDiseaseContent <-
+"
+prefix wprdfp:      <http://rdf.wikipathways.org/Pathway/>
+
+SELECT ?wpid_revision  (count(distinct ?omim) as ?diseaseIDs)
+WHERE {
+VALUES ?wpid_revision {wprdfp:WP4224_r119708 wprdfp:WP4225_r119710 wprdfp:WP4571_r119712 wprdfp:WP4595_r119711}
+?pathway a wp:Pathway ;
+         dcterms:identifier ?wpid .
+?diseaseNode a gpml:Label;
+         dcterms:isPartOf ?wpid_revision ;
+         gpml:href ?omim .
+
+}ORDER BY ASC(?wpid_revision)
+"
+resultsDiseaseContent <- SPARQL(endpointwp,queryDiseaseContent,curl_args=list(useragent=R.version.string))
+showresultsDiseaseContent <- resultsDiseaseContent$results
+remove(queryDiseaseContent, resultsDiseaseContent)
+
+#Print results Table
+print(showresultsMetadata)
+print(showresultsDatanodeContent)
+print(showresultsInteractionContent)
+print(showresultsDiseaseContent)
+
+```
+# 2.4 Selection of Relevant Biomarkers
+First, the Patient data is connected to the reference data (including identifier mapping). Second, the annotated data is checked for missing values (NAs) and unification to ChEBI.
+```{r}
+## First, match the names of all biomarkers to an identifier (from reference value data, these mappings have been checked manually)
+library(dplyr) #needed for left_join() operation
+#Note: the matching below is case sensitive (left_join from dplyr doesn't have an option for case insensitive matching)
+annotated_PUPY <-
+left_join(patientID_PUPY, age_patientID_PUPY, by=c("Dutch.name")) %>%
+  rowwise()  
+  colnames(annotated_PUPY)[5] <- "low.Ref"
+  colnames(annotated_PUPY)[6] <- "high.Ref"
+
+annotated_urea <-
+left_join(patientID_urea, age_patientID_urea, by=c("Dutch.name")) %>%
+  rowwise()  
+  colnames(annotated_urea)[5] <- "low.Ref"
+  colnames(annotated_urea)[6] <- "high.Ref"
+
+annotated_both <- rbind(annotated_PUPY, annotated_urea) #Combining data for PUPY and urea biomarkers in one dataframe
+
+#Remove rows which are for treatment values (Oxypurinol and allopurinol) or not measured by assays anymore(Argininosuccinic acid anhydride) by name of compound
+annotated_both <- annotated_both [(!(annotated_both$Dutch.name=="oxypurinol") & !(annotated_both$Dutch.name=="allopurinol") & !(annotated_both$Dutch.name=="ASA_anhydride")),]
+
+MissingMappings <- list()
+counter = 1
+for (i in 1:nrow(annotated_both)){
+  if(annotated_both[i,4] != ""){next}
+  else{
+    MissingMappings[counter] <- (annotated_both[i,1])
+    counter <- counter + 1
+   }
+}
+remove(i,counter)
+
+CHEBIMissing <- list()
+counter = 1
+for (i in 1:nrow(annotated_both)){
+  if(!grepl('CHEBI', annotated_both[i,4]) && annotated_both[i,4] != ""){
+    CHEBIMissing[counter] <- (annotated_both[i,1])
+    counter <- counter + 1
+    }
+  else{next}
+}
+remove(i,counter)
+remove(patientID_PUPY,patientID_urea,annotated_PUPY,annotated_urea,age_patientID_PUPY,age_patientID_urea)
+print(paste("These biomarkers do not have an identfier mapping:" , paste(c(MissingMappings), collapse=', ' )))
+print(paste("These biomarkers are not annotated with a ChEBI ID:" , paste(c(CHEBIMissing), collapse=', ' )))
+  
+```
+Second, comparing patient data to reference data to calculate the log(2) change value and data cleanup.
+```{r}
+# First, convert the Patient Data column to a type "double" iso "character" (empty values will become "NA")
+names(annotated_both)[names(annotated_both) == patientID] <- "i.patientData" 
+annotated_both$i.patientData <- as.integer(annotated_both$i.patientData)
+
+# Second, compare the Patient Data to the reference Values (if available), and calculate an additional column called "Change".
+annotated_both <- annotated_both%>%mutate(Change = case_when(
+  i.patientData == 0 ~ NA_real_,                    # Patient data is equal to zero
+  high.Ref == 0 ~ NA_real_,                    # If highRef is equal to zero (to avoid dividing by zero)
+  is.na(i.patientData) ~ NA_real_,                  # No patient data available
+  is.na(high.Ref) & is.na(low.Ref) & i.patientData != 0 ~ NA_real_,   # If no highRef and lowRef value is available (NA), and there is PatientData, change is NA (unable to determine)
+ i.patientData >= low.Ref & i.patientData <= high.Ref ~ 1,  #Patient data between reference values
+ i.patientData < low.Ref ~ i.patientData/low.Ref, #Patient data lower than lowRef value (downregulated) 
+ i.patientData > high.Ref ~ i.patientData/high.Ref   #Patient data higher than highRef value (upregulated)
+))
+
+# Third, remove all rows in the dataframe where the Change is NA .
+annotated_both <- annotated_both[complete.cases(annotated_both$Change),]
+
+# Add patient ID to column again:
+names(annotated_both)[names(annotated_both) == "i.patientData"] <- patientID #Rename column to actual Patient ID for visualization
+# Convert "Change column to log(2) scale
+annotated_both$log.Change <- log(annotated_both$Change, 2)
+#Convert Change column from scientific notation to 2 digits.
+is.num <- sapply(annotated_both, is.numeric)
+annotated_both[is.num] <- lapply(annotated_both[is.num], round, 2)
+remove(is.num)
+
+#Copy data for further cleanup (sort based on highest log-change value, no zero values etc.):
+annotated_both_nozero <-annotated_both
+#Data cleanup
+annotated_both_nozero <- annotated_both_nozero [(!(annotated_both_nozero$log.Change==0)),] #Remove rows with zero's :
+annotated_both_nozero <- annotated_both_nozero[order(-annotated_both_nozero$log.Change),]  #Sort on log2(change)
+#Print final dataset of patient before visualisation (only relevant columns):
+print(annotated_both_nozero[,c(1,3,4,9)], digits = 2)
+
+```
+Third, find which relevant biomarkers are in a pathway model.
+```{r}
+##Add all IDs in a list
+CHEBI_IDs <- list()
+counter = 1
+for (i in 1:nrow(annotated_both_nozero)){
+  if(grepl('CHEBI', annotated_both_nozero[i,4]) && annotated_both_nozero[i,4] != "" && annotated_both_nozero[i,9] != 0){
+    CHEBI_IDs[counter] <- (annotated_both_nozero[i,4])
+    counter <- counter + 1
+    }
+  else{next}
+}
+remove(i,counter)
+vector_CHEBI <- unlist(CHEBI_IDs) #convert list to array, for traversing the data to a SPARQL query later on
+library(stringr)
+cleaned_CHEBI <- str_replace(vector_CHEBI, "CHEBI:", "ch:") #update IDs to work with SPARQL query
+supercleaned_CHEBI <- str_replace(vector_CHEBI, "CHEBI:", "") #update IDs to work with SPARQL query
+string_CHEBI <- paste(c(cleaned_CHEBI), collapse=' ' )
+remove (CHEBI_IDs, vector_CHEBI, cleaned_CHEBI)
+
+##Connect to Endpoint WikiPathways (if step 2.3 is skipped)
+endpointwp <- "https://sparql.wikipathways.org/sparql"
+
+##For now, split up the query in sections, to add the string_CHEBI as VALUES.
+item1 = "PREFIX ch:<https://identifiers.org/chebi/CHEBI:>
+select distinct ?pathwayRes (str(?wpid) as ?pathway) (str(?title) as ?pathwayTitle) (count(distinct ?chebiMetabolite) AS ?CHEBIsInPWs)
+where {
+VALUES ?chebiMetabolite {"
+item2 = " }
+ 
+ ?datanode	a wp:Metabolite ;          
+           	wp:bdbChEBI ?chebiMetabolite ;
+    		dcterms:isPartOf ?pathwayRes .
+
+ ?pathwayRes a wp:Pathway ;
+             wp:organismName \'Homo sapiens\'^^xsd:string ; 
+    		dcterms:identifier ?wpid ;
+    		dc:title ?title .
+}
+
+ORDER BY DESC(?CHEBIsInPWs)"
+
+query_RelevantPWs <- paste(item1,string_CHEBI,item2)
+remove(item1,item2)
+
+results_RelevantPWs <- SPARQL(endpointwp,query_RelevantPWs,curl_args=list(useragent=R.version.string))
+showresults_RelevantPWs <- results_RelevantPWs$results
+remove(query_RelevantPWs,results_RelevantPWs)
+
+print(paste0("There are ", nrow(annotated_both_nozero) ," biomarkers relevant for patient " , patientID, ", with ChEBI-IDs: ", string_CHEBI, "."))
+
+```
+Fourth, find which patient specific biomarkers are not in any pathway.
+```{r}
+##Find Missing Biomarkers (not part of any Human pathway model)
+item1 = "PREFIX ch:<https://identifiers.org/chebi/CHEBI:>
+SELECT DISTINCT ?chebiMetabolite WHERE {
+  VALUES ?chebiMetabolite {"
+item2 = "}
+  ?pathwayRes  a wp:Pathway ;
+             	wp:organismName 'Homo sapiens'^^xsd:string .
+  
+  ?metabolite 	a wp:Metabolite ;
+                dcterms:identifier ?id ;
+                dcterms:isPartOf ?pathwayRes .
+
+  ?metabolite wp:bdbChEBI ?chebiMetabolite.
+}"
+
+queryMissingBiomarkers <- paste(item1,string_CHEBI,item2)
+remove(item1,item2)
+
+resultsMissingBiomarkers <- SPARQL(endpointwp,queryMissingBiomarkers,curl_args=list(useragent=R.version.string))
+listMissingBiomarkers <- c(resultsMissingBiomarkers$results) #safe results as list for comparison.
+remove(queryMissingBiomarkers,resultsMissingBiomarkers)
+
+CHEBI_inPWs <- gsub("[<https://identifiers.org/chebi/CHEBI:>]", "", listMissingBiomarkers) #ChEBI IDs IRI cleanup
+intersectingCHEBI <- setdiff(supercleaned_CHEBI,CHEBI_inPWs)
+string_intersectingCHEBI <- paste(c(intersectingCHEBI), collapse=', ' )
+count_biomarkers <- sapply(strsplit(string_CHEBI, " "), length)
+
+#Find names for missing Biomarkers based on ChEBi ID (to help with data curation)
+CHEBI_intersectingCHEBI <- paste0("CHEBI:", intersectingCHEBI) #update IDs to match back to data again
+missingNames <- list()
+for (j in 1:length(CHEBI_intersectingCHEBI)){
+  for (i in 1:nrow(annotated_both_nozero)){
+    if(annotated_both_nozero[i,4] == CHEBI_intersectingCHEBI[j]){
+       missingNames[j] <- annotated_both_nozero[i,3]
+      }
+    else{next}
+  }
+}
+remove(i,j)
+#Save list on one string for reporting purposes
+string_missingNames <- do.call(paste, c(as.list(missingNames), sep = ", "))
+
+#Print relevant information:
+if(length(intersectingCHEBI) == 0 ){print("All relevant biomarkers are in a pathway!")} else{
+  print(paste0("These biomarkers (as ChEBI IDs) are not in a pathway: " , string_intersectingCHEBI, "; with the following Database names: ", string_missingNames))}
+```
+# 2.5 Theoretical Biomarker Data
+
+Read in information from IEMBase (collected manually) and select only data relevant to sample matrix (urine) and age category (from patient)
+```{r}
+biomarkers_purine_all <- read.table(file = 'Data/IEM_database_info_Purine.txt', sep = '\t', header = TRUE)
+biomarkers_pyrimidine_all <- read.table(file = 'Data/IEM_database_info_Pyrimidine.txt', sep = '\t', header = TRUE)
+biomarkers_urea_all <- read.table(file = 'Data/IEM_database_info_Urea.txt', sep = '\t', header = TRUE)
+
+list_diseases_purine <- unique(biomarkers_purine_all[c(17)]) #list all unique disease protein names
+list_diseases_purine  <- list_diseases_purine[complete.cases(list_diseases_purine ), ] #Remove NA values
+amount_diseases_purine <- length(list_diseases_purine) #count all unique diseases
+
+list_diseases_pyrimidine <- unique(biomarkers_pyrimidine_all[c(17)]) #list all unique disease protein names
+list_diseases_pyrimidine  <- list_diseases_pyrimidine [complete.cases(list_diseases_pyrimidine ), ] #Remove NA values
+amount_diseases_pyrimidine <- length(list_diseases_pyrimidine) #count all unique diseases
+
+list_diseases_urea <- unique(biomarkers_urea_all[c(17)]) #list all unique disease protein names
+list_diseases_urea  <- list_diseases_urea [complete.cases(list_diseases_urea ), ] #Remove NA values
+amount_diseases_urea <- length(list_diseases_urea) #count all unique diseases
+
+total_list_diseases <- rbind(list_diseases_purine, list_diseases_pyrimidine, list_diseases_urea)
+total_amount_diseases <- amount_diseases_purine + amount_diseases_pyrimidine + amount_diseases_urea
+
+## Print amount of unique diseases for each category:
+paste0("In total, there were ", amount_diseases_purine ," unique purine, ", amount_diseases_pyrimidine, " pyrimidine and ", amount_diseases_urea, " urea cycle IMDs (total of ", total_amount_diseases ," disorders).")
+
+##PUPY: (age in years)
+if(age >= 0 && age < 1){
+  ref_age_markers = c(10)  #age_0to1m, neonatal
+  }else if(age >= 1 && age < 18){
+  ref_age_markers  = c(11) #age_1mto18m, infancy
+  }else if(age >= 18 && age < 132){
+  ref_age_markers  = c(12) #age_18mto11y, childhood
+  }else if(age >= 131 && age < 192){
+  ref_age_markers = c(13) #age_11to16y, adolescence
+  }else{
+    ref_age_markers = c(14) #age_16<, adulthood
+  }
+
+biomarkers_purine_age <- as.data.frame(biomarkers_purine_all[, c(1,17,5:7,ref_age_markers,16)],  drop=false) 
+biomarkers_purine_age$Category <- 1
+biomarkers_pyrimidine_age <- as.data.frame(biomarkers_pyrimidine_all[, c(1,17,5:7,ref_age_markers,16)],  drop=false) 
+biomarkers_pyrimidine_age$Category <- 2
+biomarkers_urea_age <- as.data.frame(biomarkers_urea_all[, c(1,17,5:7,ref_age_markers,16)],  drop=false) 
+biomarkers_urea_age$Category <- 3
+
+biomarkers_three <- rbind(biomarkers_purine_age, biomarkers_pyrimidine_age, biomarkers_urea_age) #Combining data theoretical biomarkers in one dataframe
+names(biomarkers_three)[6] <- "UpDown"
+remove(biomarkers_purine_all, biomarkers_purine_age, biomarkers_pyrimidine_all, biomarkers_pyrimidine_age, biomarkers_urea_all, biomarkers_urea_age)
+
+# Third, clean up the data, by selecting only entries with a HMDB ID, measured in urine, and converting non-numerical entries for up/down regulation.
+biomarkers_three <- biomarkers_three  [(!(is.na(biomarkers_three$HMDB))),]
+biomarkers_three <- biomarkers_three  [(!(is.na(biomarkers_three$Measured.in))) & ((biomarkers_three$Measured.in=="U") | (biomarkers_three$Measured.in=="Urine")), ]
+
+#Replace non-numerical characters with values
+biomarkers_three <- within(biomarkers_three, UpDown[UpDown == "-2 to -1"] <- ("-1.5")) 
+biomarkers_three <- within(biomarkers_three, UpDown[UpDown == "-2 to n"] <- ("-1"))
+biomarkers_three <- within(biomarkers_three, UpDown[UpDown == "-1 to n"] <- ("-0.5"))
+biomarkers_three <- within(biomarkers_three, UpDown[UpDown == "n to 2"] <- ("1"))
+biomarkers_three <- within(biomarkers_three, UpDown[UpDown == "n to 1"] <- ("0.5"))
+biomarkers_three <- within(biomarkers_three, UpDown[UpDown == "n"] <- ("0"))
+biomarkers_three <- within(biomarkers_three, UpDown[UpDown == "+-"] <- ("0"))
+
+biomarkers_three$UpDown <- as.integer(biomarkers_three$UpDown)
+
+##Convert old HMD's to new IDs:
+for (i in 1:length((biomarkers_three$HMDB))) {
+  if(nchar(biomarkers_three$HMDB[i])<= 9){
+    biomarkers_three$HMDB[i] <- str_replace(biomarkers_three$HMDB[i], "HMDB", "HMDB00")
+  }
+  else{next}
+}
+remove(i)
+
+amount_biomarkers_mergedData <- nrow(unique(biomarkers_three[c(3)]))
+
+## Print amount of unique diseases for each category:
+paste0("For these three classes of IMDs, ", amount_biomarkers_mergedData ," unique biomarkers were relevant for the sample matrix urine.")
+
+
+figure_caption_biomarkers = paste0(biomarkers_three$HMDB, ': ',biomarkers_three$Symptom)
+figure_caption_biomarkers <- unique(figure_caption_biomarkers)
+figure_caption_biomarkers <- paste(figure_caption_biomarkers, collapse = ', ')
+figure_caption_diseases = paste0(biomarkers_three$Protein_HGNC_name, ': ',biomarkers_three$Disorder)
+figure_caption_diseases <- unique(figure_caption_diseases)
+figure_caption_diseases <- paste(figure_caption_diseases, collapse = ', ')
+
+relevant <- biomarkers_three[,c(2,5,6,8)]
+
+##Remove rows with NA values anywhere
+relevant <- relevant[complete.cases(relevant), ]
+
+#Keep unique diseases and category names
+diseases_categories <- relevant[,c(1,4)]
+unique_disease_categories <- aggregate(diseases_categories[-1], list(diseases_categories$Protein_HGNC_name), FUN = mean, na.rm = TRUE) #Sorted alphabetically
+
+# Load required packages for cast() function (data transformation based on certain column input.)
+if (!require("reshape2")) {
+   install.packages("reshape2", dependencies = TRUE)
+   library(reshape2)
+   }
+if (!require("reshape")) {
+   install.packages("reshaper", dependencies = TRUE)
+   library(reshape)
+   }
+
+# Transform the data, using protein HGNC names as row names, HMDB-IDs as columns, and UpDown-regulation values to create matrix
+protein.cast <- cast(relevant, Protein_HGNC_name~HMDB, value="UpDown", sum)
+column_start = (ncol(protein.cast)+1)
+for (i in 1:nrow(protein.cast)) {
+  if(protein.cast[i,1] == unique_disease_categories[i,1]){
+    protein.cast[i,column_start] <- unique_disease_categories[i,2]
+  }
+}
+remove(i)
+names(protein.cast)[column_start] <- "Category"
+protein.cast_ordered <- protein.cast[order(protein.cast$Category),]
+
+lines_Category_Purine <- nrow(protein.cast_ordered[protein.cast_ordered$Category == "1",])
+lines_Category_Pyrimidine <- nrow(protein.cast_ordered[protein.cast_ordered$Category == "2",])
+lines_Category_Urea <- nrow(protein.cast_ordered[protein.cast_ordered$Category == "3",])
+
+##Remove categories column again, so it will not disturb the correlation calculation
+protein.cast_ordered <- subset(protein.cast_ordered, select=-c(Category))
+rnames <- protein.cast_ordered[,1] #Store the protein names to use as row values in matrix later
+matrix_protein.cast <- data.matrix(protein.cast_ordered) #convert the dataframe to a matrix (only including numeric values)
+rownames(matrix_protein.cast) <- rnames #Add the saved protein names as rowLabels
+matrix_protein.cast <- matrix_protein.cast[,-1] #Remove the first column, including count of rows from dataframe. #Sorted alphabetically
+
+remove(biomarkers_three, diseases_categories, protein.cast, protein.cast_ordered, relevant, unique_disease_categories)
+
+not_covered_IMDs <- setdiff(total_list_diseases,rnames)
+not_covered_IMDs <- paste(not_covered_IMDs, collapse = ', ')
+amount_biomarkers_matrixData <- ncol(matrix_protein.cast)
+amount_diseases_matrixData <- nrow(matrix_protein.cast)
+
+##Add disorders not covered with zero's for all columns:
+#MatrixB <- rbind(MatrixA, c(10,11,12))  
+
+## Print amount of unique diseases for each category:
+paste0("Taking available reference data into account and availability of a HMDB ID, a maximum of ", amount_biomarkers_matrixData ," unique biomarkers could be linked to ", amount_diseases_matrixData, " IMDs.")
+paste0("For the following IMDs, no data was available: ", not_covered_IMDs, ".")
+
+if (!require("gplots")) {
+   install.packages("gplots", dependencies = TRUE)
+   library(gplots)
+   }
+if (!require("RColorBrewer")) {
+   install.packages("RColorBrewer", dependencies = TRUE)
+   library(RColorBrewer)
+   }
+
+my_palette <- colorRampPalette(c("blue", "white", "red"))(n = 299)
+
+col_breaks = c(seq(-3,-1,length=100),  # for blue
+  seq(-0.99,0.99,length=100),           # for yellow
+  seq(1,3,length=100))             # for red
+
+#Create a file name specific for patientID
+filename <- paste0("Images/", age, "months_heatmap.png")
+title_name <- paste0("Biomarker overlap for three IMD types, \n age category: ", agerange)
+
+# creates a 5 x 5 inch image
+png(filename,    # create PNG for the heat map        
+  width = 5*300,        # 5 x 300 pixels
+  height = 5*300,
+  res = 280,            # 300 pixels per inch
+  pointsize = 8)        # smaller font size
+
+heatmap.2(matrix_protein.cast,
+  cellnote = matrix_protein.cast,  # same data set for cell labels
+  main = title_name, # heat map title
+  notecol="black",      # change font color of cell labels to black
+  
+  RowSideColors = c(    # grouping row-variables into different categories, e.g.
+     rep("gray", lines_Category_Purine),   #  Purine diseases
+     rep("blue", lines_Category_Pyrimidine),    # Pyrimidine diseases
+     rep("black", lines_Category_Urea)),    # Urea diseases
+  
+  density.info="none",  # turns off density plot inside color legend
+  trace="none",         # turns off trace lines inside the heat map
+  margins =c(12,9),     # widens margins around plot
+  col=my_palette,       # use on color palette defined earlier
+  breaks=col_breaks,    # enable color transition at specified limits
+  dendrogram="row",     # only draw a row dendrogram
+  Colv="NA")            # turn off column clustering
+
+par(lend = 1)           # square line ends for the color legend
+legend("topright",      # location of the legend on the heatmap plot
+    legend = c("Purine", "Pyrimidine", "Urea cycle"), # category labels
+    col = c("gray", "blue", "black"), # color key
+    title = "IMD classes",           # legend title
+    lty= 1,             # line style
+    lwd = 10            # line width
+)
+ 
+
+dev.off()               # close the PNG device
+
+remove(rnames, title_name)
+
+#Show the heatmap as output in RMD file
+knitr::include_graphics(filename)
+
+#Print Figure caption
+paste("Protein names correspond to the following disorders:", figure_caption_diseases)
+paste(". HMDB IDs resemble these metabolites:", figure_caption_biomarkers)
+
+remove(total_list_diseases, amount_biomarkers_matrixData, amount_biomarkers_mergedData, amount_diseases_matrixData, amount_diseases_purine, amount_diseases_pyrimidine, amount_diseases_urea, column_start, figure_caption_biomarkers, figure_caption_diseases, list_diseases_purine, list_diseases_pyrimidine, list_diseases_urea, not_covered_IMDs, total_amount_diseases)
+```
+# 2.6 Relevant Biomarker Overlap
+```{r}
+## Obtain patient data
+patient_biomarker_data_HMDB <- annotated_both_nozero[,c(4,7,9)]
+patient_biomarker_data_HMDB <- patient_biomarker_data_HMDB[!(is.na(patient_biomarker_data_HMDB$HMDB) | patient_biomarker_data_HMDB$HMDB==""), ]
+
+#Convert log(2)change data to similar numeric scale as theoretical biomarker data (-3 to 3)
+patient_biomarker_data_HMDB <- patient_biomarker_data_HMDB%>%mutate(biomarker.Change = case_when(
+ log.Change > 3 ~ 3,         # Every log(2) change value larger then 3
+ log.Change < -3 ~ -3,       # Every log(2) change value smaller then -3
+ TRUE ~ log.Change           # Keep all other values the same
+))
+
+#Remove columns which are not needed
+patient_biomarker_data_HMDB <- patient_biomarker_data_HMDB[,c(-1,-3)]
+#Transpose data
+patient_extension = (t(patient_biomarker_data_HMDB[,2]))
+colnames(patient_extension) <- patient_biomarker_data_HMDB$HMDB
+rownames(patient_extension) <- patientID
+
+#Add patient data to matrix
+matrix_protein.cast_patient <- acast(rbind(melt(matrix_protein.cast), melt(patient_extension)), X1~X2, sum) 
+
+#Create a file name specific for patientID
+filename2 <- paste0("Images/", patientID, "_heatmap.png")
+title_name2 <- paste0("Biomarker overlap for three IMD types, \n age category: ", agerange, "\n for patient:", patientID)
+
+# creates a 5 x 5 inch image
+png(filename2,    # create PNG for the heat map        
+  width = 5*300,        # 5 x 300 pixels
+  height = 5*300,
+  res = 280,            # 300 pixels per inch
+  pointsize = 8)        # smaller font size
+
+heatmap.2(matrix_protein.cast_patient,
+  cellnote = round(matrix_protein.cast_patient,0),  # same data set for cell labels
+  main = title_name2, # heat map title
+  notecol="black",      # change font color of cell labels to black
+  
+  RowSideColors = c(    # grouping row-variables into different categories, e.g.
+     rep("gray", lines_Category_Purine),   #  Purine diseases
+     rep("blue", lines_Category_Pyrimidine),    # Pyrimidine diseases
+     rep("black", lines_Category_Urea),    # Urea diseases
+     rep("purple", 1)) , #patientData
+  
+  density.info="none",  # turns off density plot inside color legend
+  trace="none",         # turns off trace lines inside the heat map
+  margins =c(12,9),     # widens margins around plot
+  col=my_palette,       # use on color palette defined earlier
+  breaks=col_breaks,    # enable color transition at specified limits
+  dendrogram="row",     # only draw a row dendrogram
+  Colv="NA")            # turn off column clustering
+
+par(lend = 1)           # square line ends for the color legend
+legend("topright",      # location of the legend on the heatmap plot
+    legend = c("Purine", "Pyrimidine", "Urea cycle", "Patient"), # category labels
+    col = c("gray", "blue", "black", "purple"), # color key
+    title = "IMD classes",           # legend title
+    lty= 1,             # line style
+    lwd = 10            # line width
+)
+ 
+
+dev.off()               # close the PNG device
+
+#Show the heatmap as output in RMD file
+knitr::include_graphics(filename2)
+
+##To-Do: print names of metabolites added in heatmap originating from patient.
+
+```
+# 2.7 Pathway Selection
+First, find relevant pathway from WikiPathways (sorted on covering most patient specific biomarkers)
+```{r}
+#For now, filter out Reactome PWs due to visualization issues.
+item1 = "PREFIX ch:<https://identifiers.org/chebi/CHEBI:>
+PREFIX cur: <http://vocabularies.wikipathways.org/wp#Curation:>
+select distinct ?pathwayRes (str(?wpid) as ?pathway) (str(?title) as ?pathwayTitle) (count(distinct ?chebiMetabolite) AS ?CHEBIsInPWs) (GROUP_CONCAT(DISTINCT fn:substring(?hgnc,37);separator=' ') AS ?Proteins) (GROUP_CONCAT(DISTINCT fn:substring(?chebiMetabolite,37);separator=' ') AS ?includedCHEBIs)
+where {
+VALUES ?chebiMetabolite {"
+
+item2 = "}
+ 
+ ?datanode	a wp:Metabolite ;          
+           	wp:bdbChEBI ?chebiMetabolite ;
+    		dcterms:isPartOf ?pathwayRes .
+
+ ?pathwayRes a wp:Pathway ;
+             wp:organismName 'Homo sapiens'^^xsd:string ; 
+    		dcterms:identifier ?wpid ;
+    		dc:title ?title .
+    		
+ ?datanode2 wp:bdbHgncSymbol ?hgnc ;
+    		dcterms:isPartOf ?pathwayRes .
+    		
+  #?pathwayRes wp:ontologyTag cur:Reactome_Approved . 
+  ?pathwayRes wp:ontologyTag cur:AnalysisCollection .   		
+}
+
+ORDER BY DESC(?CHEBIsInPWs) "
+
+query_CombinePWs <- paste(item1,string_CHEBI,item2)
+remove(item1, item2)
+results_CombinePWs <- SPARQL(endpointwp,query_CombinePWs,curl_args=list(useragent=R.version.string))
+showresults_CombinePWs <- results_CombinePWs$results
+remove(query_CombinePWs,results_CombinePWs)
+
+#Print table with first 5 relevant pathways (if less than 5 are found, print only those)
+if(nrow(showresults_CombinePWs) < 5){
+print(showresults_CombinePWs_Second[1:nrow(showresults_CombinePWs_Second),c(2:4,6,5)])
+}else{print(showresults_CombinePWs[1:5,c(2:4,6,5)])}
+```
+Select most relevant pathways
+```{r}
+## Note for user: pick a different number here, if another pathway than the first is deemed most relevant (default is top pathway)
+first_selected_pathway = 1
+```
+
+Second, find second pathway covering most unique biomarkers:
+```{r}
+#First, obtain all the ChEBI IDs of the first ranked pathway, compare these to the list of remaining markers and only retain the marker which weren't covered yet
+catch_chebis_firstPW <- showresults_CombinePWs[first_selected_pathway,6]
+split_chebis_firstPW <- as.list(strsplit(catch_chebis_firstPW, ' ')[[1]])
+split_string_CHEBI <- as.list(strsplit(string_CHEBI, ' ')[[1]])
+cleaned_string_CHEBI <- as.list(str_replace(split_string_CHEBI, "ch:", ""))
+compare_FirstSecond_CHEBI <- setdiff(cleaned_string_CHEBI, split_chebis_firstPW)
+query_compatible_second <- as.list(paste("ch:", compare_FirstSecond_CHEBI, sep=""))
+string_CHEBI_second <- paste(query_compatible_second, collapse = ' ')
+remove(catch_chebis_firstPW,split_chebis_firstPW,split_string_CHEBI,cleaned_string_CHEBI,compare_FirstSecond_CHEBI,query_compatible_second)
+
+item1 = "PREFIX ch:<https://identifiers.org/chebi/CHEBI:>
+PREFIX cur: <http://vocabularies.wikipathways.org/wp#Curation:>
+select distinct ?pathwayRes (str(?wpid) as ?pathway) (str(?title) as ?pathwayTitle) (count(distinct ?chebiMetabolite) AS ?CHEBIsInPWs) (count(distinct ?chebiMetaboliteSecond) AS ?CHEBIsInPWsSecond) (GROUP_CONCAT(DISTINCT fn:substring(?hgnc,37);separator=' ') AS ?Proteins) (GROUP_CONCAT(DISTINCT fn:substring(?chebiMetabolite,37);separator=' ') AS ?includedCHEBIs)
+where {
+VALUES ?chebiMetabolite {"
+
+item2 = "}
+VALUES ?chebiMetaboliteSecond {"
+
+item3 = "}
+ 
+ ?datanode	a wp:Metabolite ;          
+           	wp:bdbChEBI ?chebiMetabolite ;
+    		dcterms:isPartOf ?pathwayRes .
+
+ ?pathwayRes a wp:Pathway ;
+             wp:organismName 'Homo sapiens'^^xsd:string ; 
+    		dcterms:identifier ?wpid ;
+    		dc:title ?title .
+    		
+ ?datanode2 wp:bdbHgncSymbol ?hgnc ;
+    		dcterms:isPartOf ?pathwayRes .
+    		
+  #?pathwayRes wp:ontologyTag cur:Reactome_Approved . 
+  ?pathwayRes wp:ontologyTag cur:AnalysisCollection .   
+  
+  ?datanode	a wp:Metabolite ;          
+           	wp:bdbChEBI ?chebiMetaboliteSecond ;
+    		dcterms:isPartOf ?pathwayRes .
+}
+
+ORDER BY DESC(?CHEBIsInPWsSecond) "
+
+query_CombinePWs_Second <- paste(item1,string_CHEBI,item2, string_CHEBI_second, item3)
+remove(item1, item2, item3)
+
+results_CombinePWs_Second <- SPARQL(endpointwp,query_CombinePWs_Second,curl_args=list(useragent=R.version.string))
+showresults_CombinePWs_Second <- results_CombinePWs_Second$results
+remove(query_CombinePWs_Second,results_CombinePWs_Second)
+
+#Print table with second match, first 5 relevant pathways
+print("Second best matching pathways are:")
+if(nrow(showresults_CombinePWs_Second) < 5){
+print(showresults_CombinePWs_Second[1:nrow(showresults_CombinePWs_Second),c(2,3,4,5,7)])
+}else{print(showresults_CombinePWs_Second[1:5,c(2,3,4,5,7)])}
+```
+Select 2nd most relevant pathways
+```{r}
+## Note for user: pick a different number here, if another pathway than the first is deemed most relevant (default is top pathway)
+second_selected_pathway = 1
+```
+
+Third, find third pathway covering most unique biomarkers:
+```{r}
+#First, obtain all the ChEBI IDs of the second highest ranked pathway, compare these to the list of markers remaining and only retain the marker which weren't covered yet
+catch_chebis_secondPW <- showresults_CombinePWs_Second[second_selected_pathway,7]
+split_chebis_secondPW <- as.list(strsplit(catch_chebis_secondPW, ' ')[[1]])
+split_string_CHEBI_second <- as.list(strsplit(string_CHEBI_second, ' ')[[1]])
+cleaned_string_CHEBI_second <- as.list(str_replace(split_string_CHEBI_second, "ch:", ""))
+compare_SecondThird_CHEBI <- setdiff(cleaned_string_CHEBI_second, split_chebis_secondPW)
+query_compatible_third <- as.list(paste("ch:", compare_SecondThird_CHEBI, sep=""))
+string_CHEBI_third <- paste(query_compatible_third, collapse = ' ')
+remove(catch_chebis_secondPW,split_chebis_secondPW,split_string_CHEBI_second,cleaned_string_CHEBI_second,compare_SecondThird_CHEBI,query_compatible_third)
+
+item1 = "PREFIX ch:<https://identifiers.org/chebi/CHEBI:>
+PREFIX cur: <http://vocabularies.wikipathways.org/wp#Curation:>
+select distinct ?pathwayRes (str(?wpid) as ?pathway) (str(?title) as ?pathwayTitle) (count(distinct ?chebiMetabolite) AS ?CHEBIsInPWs) (count(distinct ?chebiMetaboliteSecond) AS ?CHEBIsInPWsSecond) (count(distinct ?chebiMetaboliteThird) AS ?CHEBIsInPWsThird) (GROUP_CONCAT(DISTINCT fn:substring(?hgnc,37);separator=' ') AS ?Proteins) (GROUP_CONCAT(DISTINCT fn:substring(?chebiMetabolite,37);separator=' ') AS ?includedCHEBIs)
+where {
+VALUES ?chebiMetabolite {"
+
+item2 = "}
+VALUES ?chebiMetaboliteSecond {"
+
+item3 = "}
+VALUES ?chebiMetaboliteThird {"
+
+item4 = "}
+ 
+ ?datanode	a wp:Metabolite ;          
+           	wp:bdbChEBI ?chebiMetabolite ;
+    		dcterms:isPartOf ?pathwayRes .
+
+ ?pathwayRes a wp:Pathway ;
+             wp:organismName 'Homo sapiens'^^xsd:string ; 
+    		dcterms:identifier ?wpid ;
+    		dc:title ?title .
+    		
+ ?datanode2 wp:bdbHgncSymbol ?hgnc ;
+    		dcterms:isPartOf ?pathwayRes .
+    		
+  #?pathwayRes wp:ontologyTag cur:Reactome_Approved . 
+  ?pathwayRes wp:ontologyTag cur:AnalysisCollection .   
+  
+  ?datanode	a wp:Metabolite ;          
+           	wp:bdbChEBI ?chebiMetaboliteSecond ;
+    		dcterms:isPartOf ?pathwayRes .
+    		
+  ?datanode	a wp:Metabolite ;          
+           	wp:bdbChEBI ?chebiMetaboliteThird ;
+    		dcterms:isPartOf ?pathwayRes .  		
+}
+
+ORDER BY DESC(?CHEBIsInPWsThird) "
+
+query_CombinePWs_Third <- paste(item1,string_CHEBI,item2, string_CHEBI_second, item3, string_CHEBI_third, item4)
+remove(item1, item2, item3, item4)
+
+results_CombinePWs_Third<- SPARQL(endpointwp,query_CombinePWs_Third,curl_args=list(useragent=R.version.string))
+showresults_CombinePWs_Third <- results_CombinePWs_Third$results
+remove(query_CombinePWs_Third,results_CombinePWs_Third)
+
+#Print table with third match, first 5 relevant pathways (if there are 5)
+##TODO: skip lines below, if there is no relevant third best PW. (patient I for example)
+print("Third best matching pathways are:")
+if(nrow(showresults_CombinePWs_Third) < 1){
+paste("No more pathway models found")
+}else if(nrow(showresults_CombinePWs_Third) < 5){
+print(showresults_CombinePWs_Third[1:nrow(showresults_CombinePWs_Third),c(2,3,4:6,8)])
+  }else{print(showresults_CombinePWs_Third[1:5,c(2,3,4:6,8)])}
+
+```
+Select 3nd most relevant pathways
+```{r}
+
+if(nrow(showresults_CombinePWs_Third) < 1){
+  third_selected_pathway = 0
+paste("Skipping this step")}else{
+third_selected_pathway = 1 ## Note for user: pick a different number here, if another pathway than the first is deemed most relevant (default is top pathway)
+}
+```
+
+Fourth, find which biomarkers are not covered by top three.
+```{r}
+#First, obtain all the ChEBI IDs of the third highest ranked pathway, compare these to the list of remaining markers and only retain the marker which weren't covered yet
+if(third_selected_pathway < 1){
+paste("Using IDs from step 2 iso step 3, relevant pathway models are:")}else{
+catch_chebis_ThirdPW <- showresults_CombinePWs_Third[third_selected_pathway,7]
+split_chebis_ThirdPW <- as.list(strsplit(catch_chebis_ThirdPW, ' ')[[1]])
+split_string_CHEBI_Third <- as.list(strsplit(string_CHEBI_third, ' ')[[1]])
+cleaned_string_CHEBI_Third <- as.list(str_replace(split_string_CHEBI_Third, "ch:", ""))
+compare_ThirdFourth_CHEBI <- setdiff(cleaned_string_CHEBI_Third, split_chebis_ThirdPW)
+
+query_compatible_fourth <- as.list(compare_ThirdFourth_CHEBI, sep="")
+string_CHEBI_fourth <- paste(query_compatible_fourth, collapse = ', ')
+remove(catch_chebis_ThirdPW,split_chebis_ThirdPW,split_string_CHEBI_Third,cleaned_string_CHEBI_Third,compare_ThirdFourth_CHEBI,query_compatible_fourth)
+}
+print(paste0(showresults_CombinePWs[first_selected_pathway,3], " (", showresults_CombinePWs[first_selected_pathway,2], ") [",  showresults_CombinePWs[first_selected_pathway,4], "]"))
+print(paste0(showresults_CombinePWs_Second[second_selected_pathway,3], " (", showresults_CombinePWs_Second[second_selected_pathway,2], ") [",  showresults_CombinePWs_Second[second_selected_pathway,4], "]"))
+if(third_selected_pathway == 0){
+  print(paste0("These identifiers are not captured in the top 3 pathways: ", string_CHEBI_third))
+}else if(third_selected_pathway == 1){
+print(paste0(showresults_CombinePWs_Third[third_selected_pathway,3], " (", showresults_CombinePWs_Third[third_selected_pathway,2], ") [",  showresults_CombinePWs_Third[third_selected_pathway,4], "]"))
+  print(paste0("These identifiers are not captured in the top 3 pathways: ", string_CHEBI_fourth))
+} else{print(paste0(showresults_CombinePWs_Third[third_selected_pathway,3], " (", showresults_CombinePWs_Third[third_selected_pathway,2], ")# [",  showresults_CombinePWs_Third[third_selected_pathway,4], "]"))
+  print(paste0("These identifiers are not captured in the top 3 pathways: ", string_CHEBI_fourth))}
+
+
+
+```
+# 2.8 Data Visuzalization
+
+## Preparation
+### Installing and loading packages
+These packages need to be installed (and may take a while to run). 
+```{r}
+if(!"rWikiPathways" %in% installed.packages()){
+    if (!requireNamespace("BiocManager", quietly = TRUE))
+        install.packages("BiocManager")
+    BiocManager::install("rWikiPathways", update = FALSE)
+}
+library(rWikiPathways)
+
+load.libs <- c(
+  "RColorBrewer",
+  "rWikiPathways",
+  "RCy3")
+options(install.packages.check.source = "no")
+options(install.packages.compile.from.source = "never")
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(load.libs, update = TRUE, character.only = TRUE)
+status <- sapply(load.libs,require,character.only = TRUE)
+if(all(status)){
+    print("SUCCESS: You have successfully installed and loaded all required libraries.")
+} else{
+    cat("ERROR: One or more libraries failed to install correctly. Check the following list for FALSE cases and try again...\n\n")
+    status
+}
+
+```
+
+### Connect to cytoscape
+Open the Cytoscape Program first; this step was tested on version: 3.8.2, running on Java 11.0.11. 
+```{r}
+# Make sure to open cytoscape (>=3.8.2)
+cytoscapePing ()
+cytoscapeVersionInfo ()
+```
+### Install WikiPathways apps
+For the opening of pathway models and enhanced visualization steps, the WikiPathways app necessary. 
+```{r}
+if("WikiPathways" %in% commandsHelp("")) print("Success: the WikiPathways app is installed") else print("Warning: WikiPathways app is not installed. Please install the WikiPathways app before proceeding.")
+if(!"WikiPathways" %in% commandsHelp("")){
+  installApp("WikiPathways")
+}
+```
+### Open pathway from WikiPathways and Visualize patient data through log.Change
+Pathway models can be imported from WikiPathways with the WikiPathways apps (as pathway or network). Enabling the visualization of biomarkers scattered over several pathways, requires finding the optimal combination of two (or three) individual pathways, adding the data to these pathways and merging the results. 
+
+Determine the scale for fill color, and convert data to dataframe
+```{r}
+#Determine highest up/downregulated value:
+highest <- max(annotated_both$log.Change)
+lowest <- abs(min(annotated_both$log.Change))
+if(highest < lowest){colorRange <- lowest} else{colorRange <- highest}
+
+#Change data to dataframe before loading in Cytoscape:
+finalData <- as.data.frame(annotated_both)
+```
+
+The 2log transformed data can now be visualized on the nodes in the form of a color gradient from blue(downregulated) to white (0) to red (upregulated), just as the reference data.
+```{r}
+#Select highest relevant pathway ID (containing most biomarkers) based on previous step.
+wp= commandsRun(paste0('wikipathways import-as-network id=', showresults_CombinePWs[first_selected_pathway,2])) #pick first PW to show data on.
+
+## IF error: "Error in loadTableData(finalData, data.key.column = "ID", table.key.column = "XrefId") : Failed to load data: Provided key columns do not contain any matches", execute mapping approach
+loadTableData(finalData, data.key.column = "ID", table.key.column = "XrefId")
+
+#Set range of data values for visualisation:
+data.values = c(-colorRange,-1,0,1,colorRange)
+#display.brewer.all(length(data.values), colorblindFriendly=TRUE, type="div") # div,qual,seq,all
+node.colors <- c(rev(brewer.pal(length(data.values), "RdBu")))
+
+#Update WikiPathways pallet with Patient Data:
+setNodeColorMapping("log.Change", data.values, node.colors, default.color = "#AAAAAA", style.name = "WikiPathways-As-Network")
+
+```
+
+### Selecting the second pathway of choice
+```{r}
+#Select secondly highest ranked relevant PW (manual for now):
+wp= commandsRun(paste0('wikipathways import-as-network id=', showresults_CombinePWs_Second[second_selected_pathway,2]))
+
+loadTableData(finalData, data.key.column = "ID", table.key.column = "XrefId")
+
+#Update WikiPathways pallet with Patient Data:
+setNodeColorMapping("log.Change", data.values, node.colors, default.color = "#AAAAAA", style.name = "WikiPathways-As-Network")
+
+```
+
+### Selecting the third pathway of choice
+```{r}
+if(third_selected_pathway < 1){
+  paste("skip this step, no third pathway selected")}else{
+
+#Select third highest ranked relevant PW (manual for now):
+wp= commandsRun(paste0('wikipathways import-as-network id=', showresults_CombinePWs_Third[third_selected_pathway,2]))
+
+loadTableData(finalData, data.key.column = "ID", table.key.column = "XrefId")
+
+#Update WikiPathways pallet with Patient Data:
+setNodeColorMapping("log.Change", data.values, node.colors, default.color = "#AAAAAA", style.name = "WikiPathways-As-Network")
+}
+
+```
+### Or, in case of Identifier Mapping issues:
+First, convert the XrefId data for Metabolites to ChEBIs, to avoid mismatching between patientData and IDs in Pathways (manual step).
+```{r}
+#Install the BridgeDb App in Cytoscape
+installApp('BridgeDb')
+```
+
+Now, go to Cytoscape and select: Apps/BridgeDb/Map Identifiers (see image below)
+```{r}
+opts_knit$set(base.url='https://github.com/BiGCAT-UM/IMD/tree/main/Images/BridgeDbApp_location.png')
+```
+Then, set up your mappings to work with the BridgeDb webservice; click on 'Manage ID Mapping Resources':
+```{r}
+opts_knit$set(base.url='https://github.com/BiGCAT-UM/IMD/tree/main/Images/BridgeDbApp_mappingResource.png')
+```
+Next, selecting the following settings (and click 'OK'):
+```{r}
+opts_knit$set(base.url='https://github.com/BiGCAT-UM/IMD/tree/main/Images/BridgeDbApp_webserviceSelection.png')
+```
+Last, select the following settings (example for HMDB mappings):
+```{r}
+opts_knit$set(base.url='https://github.com/BiGCAT-UM/IMD/tree/main/Images/BridgeDbApp_mappingTask.png')
+```
+You can now proceed to the next section.
+
+### Load data on mapped column:
+```{r}
+#Note: mapping column doesn't include "CHEBI:" in front of mapping
+finalData_noCHEBI <- finalData
+finalData_noCHEBI$IDCHEBI <-finalData$ID
+
+finalData_noCHEBI$IDCHEBI <- str_replace(finalData_noCHEBI$IDCHEBI, "CHEBI:", "ch:")
+finalData_noCHEBI$ID <- str_replace(finalData_noCHEBI$ID, "CHEBI:", "")
+
+#In case XrefId is not in chebi, map through bridgeDb app first (now manual) and then execute:
+#Result should be: [1] "Success: Data loaded in defaultnode table"
+loadTableData(finalData_noCHEBI, data.key.column = "ID", table.key.column = "ChEBI")
+
+#Set range of data values for visualisation:
+data.values = c(-colorRange,0,colorRange)
+#display.brewer.all(length(data.values), colorblindFriendly=TRUE, type="div") # div,qual,seq,all
+node.colors <- c(rev(brewer.pal(length(data.values), "RdBu")))
+
+#Update WikiPathways pallet with Patient Data:
+setNodeColorMapping("log.Change", data.values, node.colors, default.color = "#AAAAAA", style.name = "WikiPathways-As-Network")
+```
+
+### Print missing biomarkers in visualisation
+```{r}
+#TODO print which biomarkers are not visualized automatically (now manually selected); also add to final reporting step!
+missing_IDs  <- paste0(annotated_both_nozero[5,4], ", " , annotated_both_nozero[10,4])
+print(annotated_both_nozero[c(5,10),c(1,3,4,8)], digits = 2)
+```
+# 2.9 Data Interpretation
+
+### Finally: Print reporting details
+```{r}
+###Print overview of information for each patient
+print(paste("Selected Patient ID is: " , patientID, ", age is between: ", agerange, " old"))
+remove(age)
+print("Relevant biomarkers are:")
+print(annotated_both_nozero[,c(1,3,4,8)], digits = 2)
+
+#Print relevant biomarker information matched to pathways:
+print(paste("There are", count_biomarkers ,"biomarkers relevant for patient" , patientID, ", the ChEBI-IDs are", string_CHEBI))
+if(length(intersectingCHEBI) == 0 ){print("All Biomarkers are in a pathway!")} else{
+  print(paste("These biomarkers (as ChEBI IDs) are not in a pathway:" , string_intersectingCHEBI))}
+
+remove(listMissingBiomarkers, CHEBI_inPWs,supercleaned_CHEBI,string_intersectingCHEBI)
+
+#Print table with first five relevant pathways
+#print(showresults_CombinePWs[1:5,c(2,3,4,6)])
+
+###Save relevant information for each patient in dataframe (for Tables in publication)
+#table6 <- data.frame(matrix(ncol=4,nrow=0, dimnames=list(NULL, c("Primary.ID", "Secondary.ID", "Tertiary.ID", "Not.covered.biomarkers"))))
+##Add patient data to dataframe (note: this overwrites existing patient entries, as opposed to using rbind)
+#table6[patientID, ] <- c(showresults_CombinePWs[1,2], showresults_CombinePWs_Second[1,2], showresults_CombinePWs_Third[1,2], missing_IDs)
+
+```

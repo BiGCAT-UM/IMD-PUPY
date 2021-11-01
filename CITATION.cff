@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Slenter
+    given-names: D. N.
+    orcid: https://orcid.org/0000-0001-8449-1318
+title: Inherited Metabolic Disorders Systems Biology workflow
+url: "https://github.com/BiGCAT-UM/IMD"

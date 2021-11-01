@@ -1,0 +1,42 @@
+Disorder 	OMIM	IEM ID	Test panel	Symptom	Measured in	HMDB	Uniprot ID	Mapping ChEBI	Neonatal (birth-1mth)	Infancy (1-18mths)	Childhood (1.5-11yrs)	Adolescence (11-16yrs)	Adulthood (>16yrs)	Present in pathway	Characteristic for disorder	Protein_HGNC_name
+Pyrimidine-5-nucleotidase I deficiency	https://omim.org/266120	IEMBASE154	Enzyme testing	Pyrimidine-5-nucleotidase I	Red blood cells		Q9H0P0	0	-3	-2	-3	-3	-3	Y	0	NT5C3A
+Pyrimidine-5-nucleotidase I deficiency	https://omim.org/266120	IEMBASE154	Purines and pyrimidines	Pyrimidine nucleotides	Red blood cells	HMDB0000262, HMDB0000630		1	3	3	3	3	3	Y	1	NT5C3A
+Pyrimidine-5-nucleotidase I deficiency	https://omim.org/266120	IEMBASE154	Specific tests	Glutathione	Red blood cells	HMDB0000125		1	-1 to n	-1 to n	-1 to n	-1 to n	-1 to n	N	1	NT5C3A
+Pyrimidine 5-nucleotidase superactivity	NA	IEMBASE156	Enzyme testing	Phosporibose pyrophosphate	Fibroblasts	HMDB0000280		1	-1	-1	NA	NA	NA		0	NT5C3A
+Pyrimidine 5-nucleotidase superactivity	NA	IEMBASE156	Enzyme testing	Uridine-5-monophosphate hydrolase	Fibroblasts		Q8TCD5	0	2	2	NA	NA	NA	Y	0	NT5C3A
+Pyrimidine 5-nucleotidase superactivity	NA	IEMBASE156	Routine tests	Uric acid	Urine	HMDB0000289		1	-1	-1	NA	NA	NA	N 	1	NT5C3A
+Dihydropyrimidine dehydrogenase deficiency	https://omim.org/274270	IEMBASE159	Enzyme testing	Dihydropyrimidine dehydrogenase	White blood cells		Q12882	0	-1	-1	-1	-1	-1	Y	0	DPYD
+Dihydropyrimidine dehydrogenase deficiency	https://omim.org/274270	IEMBASE159	Purines and pyrimidines	5-OH-Methyluracil	NA	HMDB0000469		1	2	2	2	2	2	N	1	DPYD
+Dihydropyrimidine dehydrogenase deficiency	https://omim.org/274270	IEMBASE159	Purines and pyrimidines	Thymine	Plasma	HMDB0000262		1	2	2	2	2	2	Y	1	DPYD
+Dihydropyrimidine dehydrogenase deficiency	https://omim.org/274270	IEMBASE159	Purines and pyrimidines	Thymine	Urine	HMDB0000262		1	3	3	3	3	3	Y	1	DPYD
+Dihydropyrimidine dehydrogenase deficiency	https://omim.org/274270	IEMBASE159	Purines and pyrimidines	Uracil	Plasma	HMDB0000300		1	2	2	2	2	2	Y	1	DPYD
+Dihydropyrimidine dehydrogenase deficiency	https://omim.org/274270	IEMBASE159	Purines and pyrimidines	Uracil	Urine	HMDB0000300		1	3	3	3	3	3	Y	1	DPYD
+Orotic aciduria type I	https://omim.org/258900	IEMBASE152	Enzyme testing	Uridine monophosphate synthase	Red blood cells		P11172	0	-1	-1	-1	-1	-1	Y 	0	UMPS
+Orotic aciduria type I	https://omim.org/258900	IEMBASE152	Purines and pyrimidines	Orotic acid	Plasma	HMDB0000226		1	2	2	2	2	2	Y	1	UMPS
+Orotic aciduria type I	https://omim.org/258900	IEMBASE152	Purines and pyrimidines	Orotic acid	Urine	HMDB0000226		1	3	3	3	3	3	Y	1	UMPS
+Thymidine phosphorylase deficiency	https://omim.org/603041	IEMBASE157	Enzyme testing	Thymidine phosphorylase	White blood cells		P19971	0	NA	NA	NA	-3	-3	Y	0	TYMP
+Thymidine phosphorylase deficiency	https://omim.org/603041	IEMBASE157	Purines and pyrimidines	Deoxyuridine	Plasma	HMDB0000012		1	NA	NA	NA	1	1	Y	1	TYMP
+Thymidine phosphorylase deficiency	https://omim.org/603041	IEMBASE157	Purines and pyrimidines	Deoxyuridine	Urine	HMDB0000012		1	NA	NA	NA	2	2	Y	1	TYMP
+Thymidine phosphorylase deficiency	https://omim.org/603041	IEMBASE157	Purines and pyrimidines	Thymidine	Plasma	HMDB0000273		1	NA	NA	NA	1	1	Y	1	TYMP
+Thymidine phosphorylase deficiency	https://omim.org/603041	IEMBASE157	Purines and pyrimidines	Thymidine	Urine	HMDB0000273		1	NA	NA	NA	2	2	Y	1	TYMP
+Thymidine phosphorylase deficiency	https://omim.org/603041	IEMBASE157	Routine tests	Lactate	Plasma	HMDB0001311		1	NA	NA	NA	2	2	N	1	TYMP
+Thymidine kinase 2 deficiency	https://omim.org/609560	IEMBASE158	Enzyme testing	Creatine kinase	Plasma		P12277	0	NA	1	1	NA	NA	N	1	TK2
+Thymidine kinase 2 deficiency	https://omim.org/609560	IEMBASE158	Routine tests	Creatine kinase	Plasma	HMDB0001311		1	1	1	1	1	NA	N	1	TK2
+Thymidine kinase 2 deficiency	https://omim.org/609560	IEMBASE158	Routine tests	Respiratory chain activity	Muscle			0	NA	-1	-1	NA	NA	N	0	TK2
+Dihydropyrimidinase deficiency	https://omim.org/222748	IEMBASE268	Purines and pyrimidines	Dihydrothymine	Plasma	HMDB0000079		1	2	2	2	2	2	Y	1	DPYS
+Dihydropyrimidinase deficiency	https://omim.org/222748	IEMBASE268	Purines and pyrimidines	Dihydrothymine	Urine	HMDB0000079		1	3	3	3	3	3	Y	1	DPYS
+Dihydropyrimidinase deficiency	https://omim.org/222748	IEMBASE268	Purines and pyrimidines	Dihydrouracil	Plasma	HMDB0000076		1	2	2	2	2	2	Y	1	DPYS
+Dihydropyrimidinase deficiency	https://omim.org/222748	IEMBASE268	Purines and pyrimidines	Dihydrouracil	Urine	HMDB0000076		1	3	3	3	3	3	Y	0	DPYS
+Beta-alanine alpha-ketoglutarate transaminase deficiency	https://omim.org/237400	IEMBASE161	Amino acids	Beta-alanine	Urine	HMDB0000056		1	2	2	2	2	2	Y	1	NA
+Beta-ureidopropionase deficiency	https://omim.org/613161	IEMBASE160	Purines and pyrimidines	Dihydrothymine	Plasma	HMDB0000079		1	1	1	1	1	1	Y	1	UPB1
+Beta-ureidopropionase deficiency	https://omim.org/613161	IEMBASE160	Purines and pyrimidines	Dihydrothymine	Urine	HMDB0000079		1	1	1	1	1	1	Y	1	UPB1
+Beta-ureidopropionase deficiency	https://omim.org/613161	IEMBASE160	Purines and pyrimidines	Dihydrouracil	Plasma	HMDB0000076		1	1	1	1	1	1	Y	1	UPB1
+Beta-ureidopropionase deficiency	https://omim.org/613161	IEMBASE160	Purines and pyrimidines	Dihydrouracil	Urine	HMDB0000076		1	1	1	1	1	1	Y	1	UPB1
+Beta-ureidopropionase deficiency	https://omim.org/613161	IEMBASE160	Purines and pyrimidines	N-Carbamyl-beta-alanine	Plasma	HMDB0000026		1	2	2	2	2	2	Y	1	UPB1
+Beta-ureidopropionase deficiency	https://omim.org/613161	IEMBASE160	Purines and pyrimidines	N-Carbamyl-beta-alanine	Urine	HMDB0000026		1	3	3	3	3	3	Y	1	UPB1
+Beta-ureidopropionase deficiency	https://omim.org/613161	IEMBASE160	Purines and pyrimidines	N-Carbamyl-beta-aminoisobutyric acid	Plasma	HMDB0002031		1	2	2	2	2	2	Y	1	UPB1
+Mitochondrial ribonucelotide reductase subunit 2 deficiency	https://omim.org/612075	IEMBASE150	Amino acids	Amino acids, all		HMDB0000574		1	1+	1+	NA	NA	+-	N	1	RRM2B
+Mitochondrial ribonucelotide reductase subunit 2 deficiency	https://omim.org/612075	IEMBASE150	Routine tests	Lactate	Plasma	HMDB0001311		1	2	2	NA	NA	1	N	1	RRM2B
+Mitochondrial ribonucelotide reductase subunit 2 deficiency	https://omim.org/612075	IEMBASE150	Routine tests	Respiratory chain activity	Muscle			0	NA	-3	NA	NA	-1 to n	N	0	RRM2B
+Beta-aminoisobutyrate-pyruvate transaminase deficiency	https://omim.org/210100	IEMBASE811	Purines and pyrimidines	beta-aminoisobutyrate	Urine	HMDB0002299		1	2	2	2	2	2	Y	0	AGXT2
+Dihydroorotate dehydrogenase deficiency	https://omim.org/263750	IEMBASE155	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	DHODH

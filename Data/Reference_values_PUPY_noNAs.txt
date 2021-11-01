@@ -1,0 +1,36 @@
+Dutch name	Database name	ID	Pyr/Pur	0y-1y L	0y-1y U	1y-5y L	1y-5y U	5y-16y L	5y-16y U	16y+ L	16y+ U	0y-16y L	0y-16y U	HMDB
+orotidine	Orotidine	CHEBI:25722	Y	0	13.4	0	7	0	3	0	4			HMDB0000788
+orootzuur	Orotate	CHEBI:30839	Y	0	4	0	4	0	4	0	3	0	4	HMDB0000226
+uracil	Uracil	CHEBI:17568	Y	0	39	0	36	0	18.6	0	16.2			HMDB0000300
+5-OH-methyluracil	5-OH-Methyluracil	CHEBI:16964	Y	0	4	0	4	0	4	0	2	0	4	HMDB0000469
+pseudo uridine	Pseudouridine	CHEBI:65314	Y	49	268.6	28	154	18	85.6	11	65			HMDB0000767
+2,8-dihydroxyadenine	2,8-Dihydroxyadenine	Q4596812	U	0	4	0	4	0	4	0	3	0	4	HMDB0000401
+urinezuur	Urate	CHEBI:17775	U	537.8	2289.2	281.3	1579.5	157	820.8	96.6	578			HMDB0000289
+hypoxanthine	Hypoxanthine	CHEBI:17368	U	2	57.4	4	56.6	2	31	0.8	14			HMDB0000157
+xanthine	Xanthine	CHEBI:17712	U	2	51.4	6	41	1.4	22	0	14.2			HMDB0000292
+uridine	Uridine	CHEBI:16704	Y	0	3	0	3	0	3	0	3	0	3	HMDB0000296
+adenine	Adenine	CHEBI:16708	U	0	4	0	4	0	4	0	4	0	4	HMDB0000034
+thymine	Thymine	CHEBI:17821	Y	0	3	0	3	0	3	0	2	0	3	HMDB0000262
+deoxyuridine	2-Deoxyuridine	CHEBI:16450	Y	0	1	0	1	0	1	0	1	0	1	HMDB0000012
+inosine	Inosine	CHEBI:17596	U	0	4	0	2	0	1	0	1			HMDB0000195
+guanosine	Guanosine	CHEBI:16750	U	0	1	0	1	0	1	0	0	0	1	HMDB0000133
+deoxyguanosine	2-Deoxyguanosine	CHEBI:17172	U	0	0	0	0	0	0	0	0	0	0	HMDB0000085
+deoxyinosine	2'-Deoxyinosine	CHEBI:28997	U	0	1	0	1	0	1	0	0	0	1	HMDB0000071
+thymidine	Thymidine	CHEBI:17748	Y	0	1	0	1	0	1	0	1	0	1	HMDB0000273
+SADO succinyl adenosine	Succinyladenosine	CHEBI:71169	U	0	21	0	13	0	7	0	4			HMDB0000912
+adenosine	Adenosine	CHEBI:16335	U	0	2	0	2	0	2	0	1	0	2	HMDB0000050
+deoxyadenosine	2'-Deoxyadenosine	CHEBI:17256	U	0	0.625	0	1	0	0.625	0	0	0	0.625	HMDB0000101
+dihydro-orootzuur	Dihydroorotate	CHEBI:30864	Y	0	5	0	5	0	5	0	3	0	5	
+N-carbamyl-bala	N-Carbamoyl-beta-alanine	CHEBI:11892	Y	0	45	0	16	0	13	0	9			HMDB0000026
+dihydro-uracil	Dihydrouracil	CHEBI:15901	Y	0	17.5	0	10	0	6	0	7.48			HMDB0000076
+SAICAR	SAICARP	CHEBI:18319	U	0	1	0	1	0	1	0	0.5	0	1	HMDB0000797
+N-carbamyl-beta-AIBA	N-Carbamyl-beta-aminoisobutyric acid	CHEBI:74414	Y	0	17	0	6	0	3	0	3			HMDB0002031
+AICAR	AICARP	CHEBI:18406	U	0	2	0	2	0	2	0	1	0	2	HMDB0062179
+dihydrothymine	Dihydrothymine	CHEBI:27468	Y	0	8	0	4	0	3	0	3			HMDB0000079
+oxypurinol	Oxypurinol	CHEBI:28315	U											
+allopurinol	Allopurinol	CHEBI:40279	U											
+cytidine	cytidine	CHEBI:17562												
+N-carbamyl-aspartaat	N-carbamoyl-L-aspartate(2-)	CHEBI:32814												
+5-hydroxy methyl uracil	5-(Hydroxymethyl)uracil	CHEBI:16964		0	4	0	4	0	4	0	2	0	4	HMDB0000469
+allantoine	allantoin	CHEBI:15676												
+cytosine	cytosine	CHEBI:16040												
