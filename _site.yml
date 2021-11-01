@@ -1,0 +1,11 @@
+name: "IMD-PUPY"
+navbar:
+  title: "IMD-PUPY"
+  left:
+  - text: "Home"
+   href: index.html
+  - text: "R Markdown Script"
+   href: /Scripts/Workflow_IMD_PUPY.html
+output:
+  html_document:
+ theme: Cayman
