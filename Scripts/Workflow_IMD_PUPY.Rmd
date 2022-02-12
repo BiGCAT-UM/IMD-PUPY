@@ -151,7 +151,7 @@ queryDatanodeContent <-
 "
 select distinct (str(?wpid) as ?pathway) (str(?title) as ?pathwayTitle) (count(distinct ?hgncIdProtein) AS ?ProteinsInPWs) (count(distinct ?chebiMetabolite) AS ?MetabolitesInPWs)
 where {
-VALUES ?wpid {\'WP4224\'^^xsd:string \'WP4225\'^^xsd:string \'WP4571\'^^xsd:string \'WP4595\'^^xsd:string \'WP4583\'^^xsd:string \'WP4584\'^^xsd:string}
+VALUES ?wpid {\'WP4224\' \'WP4225\' \'WP4571\' \'WP4595\' \'WP4583\' \'WP4584\'}
   ?datanode dcterms:identifier ?id ;
     dcterms:isPartOf ?pathwayRes .
   ?pathwayRes a wp:Pathway ;
@@ -177,7 +177,7 @@ remove(queryDatanodeContent, resultsDatanodeContent)
 queryInteractionContent <-
   "select distinct (str(?wpid) as ?pathway) (str(?title) as ?pathwayTitle) (count(distinct ?rheaIdInteraction) AS ?InteractionsInPWs)
 where {
-VALUES ?wpid {\'WP4224\'^^xsd:string \'WP4225\'^^xsd:string \'WP4571\'^^xsd:string \'WP4595\'^^xsd:string \'WP4583\'^^xsd:string \'WP4584\'^^xsd:string}
+VALUES ?wpid {\'WP4224\' \'WP4225\' \'WP4571\'^^ \'WP4595\' \'WP4583\' \'WP4584\'}
   ?interaction dcterms:identifier ?id ;
     dcterms:isPartOf ?pathwayRes .
   ?pathwayRes a wp:Pathway ;
@@ -202,7 +202,7 @@ prefix wprdfp:      <http://rdf.wikipathways.org/Pathway/>
 
 SELECT ?wpid_revision  (count(distinct ?omim) as ?diseaseIDs)
 WHERE {
-VALUES ?wpid_revision {wprdfp:WP4224_r119708 wprdfp:WP4225_r119710 wprdfp:WP4571_r119712 wprdfp:WP4595_r119711}
+VALUES ?wpid_revision {wprdfp:WP4224_r120400 wprdfp:WP4225_r120401 wprdfp:WP4571_r120383 wprdfp:WP4595_r120393}
 ?pathway a wp:Pathway ;
          dcterms:identifier ?wpid .
 ?diseaseNode a gpml:Label;
@@ -578,7 +578,7 @@ png(filename,    # create PNG for the heat map
   res = 280,            # 300 pixels per inch
   pointsize = 8)        # smaller font size
 
-heatmap.2(matrix_protein.cast,
+output <- heatmap.2(matrix_protein.cast,
   cellnote = matrix_protein.cast,  # same data set for cell labels
   main = title_name, # heat map title
   notecol="black",      # change font color of cell labels to black
@@ -613,7 +613,11 @@ remove(rnames, title_name)
 #Show the heatmap as output in RMD file
 knitr::include_graphics(filename)
 
-#Print Figure caption
+##Obtain the order of the diseases and biomarkers as appearing in the clustered heatmap:
+verticalAxis <- rev(rownames(matrix_protein.cast)[output$rowInd])
+horizontalAxis <- colnames(matrix_protein.cast)[output$colInd]
+
+#Print Figure caption (unsorted diseases and metabolites)
 paste("Protein names correspond to the following disorders:", figure_caption_diseases)
 paste(". HMDB IDs resemble these metabolites:", figure_caption_biomarkers)
 
