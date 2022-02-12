@@ -21,10 +21,10 @@ if(!"dplyr" %in% installed.packages()){
 }
 library(dplyr)
 
-##Setting working directory to local github file for Linux (note: you probably need to change the file path, if you run this workflow on a Windows machine):
+##Setting working directory to local github file for Linux (note: you probably need to change the file path, if you run this workflow on a Windows computer):
 knitr::opts_chunk$set(echo = TRUE)
 #setwd("~/git/IMD")
-knitr::opts_knit$set(root.dir = "~/git/IMD")
+knitr::opts_knit$set(root.dir = "~/git/IMD-PUPY")
 ```
 
 Check if the working directory is the top folder of the repository (called IMD)
