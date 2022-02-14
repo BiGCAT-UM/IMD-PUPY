@@ -664,6 +664,11 @@ remove(total_list_diseases, amount_biomarkers_matrixData, amount_biomarkers_merg
 patient_biomarker_data_HMDB <- annotated_both_nozero[,c(4,7,9)]
 patient_biomarker_data_HMDB <- patient_biomarker_data_HMDB[!(is.na(patient_biomarker_data_HMDB$HMDB) | patient_biomarker_data_HMDB$HMDB==""), ]
 
+#Dynamix caption for patient specific biomarkers:
+df_figure_caption_biomarkers_patientspecific <- annotated_both_nozero[,c(3,7)] # Combines biomarkers_three$Symptoms with biomarkers_three$HMDB
+df_figure_caption_biomarkers_patientspecific <- unique(df_figure_caption_biomarkers_patientspecific) #Only retain unique metabolite names and HMDB IDs.
+df_figure_caption_biomarkers_patientspecific <- na.omit(df_figure_caption_biomarkers_patientspecific) #remove any rows with NA-values
+
 #Convert log(2)change data to similar numeric scale as theoretical biomarker data (-3 to 3)
 patient_biomarker_data_HMDB <- patient_biomarker_data_HMDB%>%mutate(biomarker.Change = case_when(
  log.Change > 3 ~ 3,         # Every log(2) change value larger then 3
@@ -698,7 +703,7 @@ png(filename2,    # create PNG for the heat map
   res = 280,            # 300 pixels per inch
   pointsize = 8)        # smaller font size
 
-heatmap.2(matrix_protein.cast_patient,
+output_patient <- heatmap.2(matrix_protein.cast_patient,
   cellnote = round(matrix_protein.cast_patient,0),  # same data set for cell labels
   main = title_name2, # heat map title
   notecol="black",      # change font color of cell labels to black
@@ -733,6 +738,74 @@ dev.off()               # close the PNG device
 knitr::include_graphics(filename2)
 
 ##To-Do: print names of metabolites added in heatmap originating from patient.
+## Clustering order might differ, so data needs to be reloaded:
+
+##Obtain the order of the diseases and biomarkers as appearing in the clustered heatmap:
+verticalAxis_patient <- rev(rownames(matrix_protein.cast_patient)[output_patient$rowInd])
+horizontalAxis_patient <- colnames(matrix_protein.cast_patient)[output_patient$colInd]
+
+##New dynamic Figure captions:
+###Diseases
+disorderNames_patient <- list()
+
+for (j in 1:length(verticalAxis_patient)){
+  for (i in 1:nrow(df_figure_caption_disorders)){
+    if(df_figure_caption_disorders[i,1] == verticalAxis_patient[j]){
+      combineDiseaseHGNC_patient <- paste0(verticalAxis_patient[j], ': ', df_figure_caption_disorders[i,2])
+       disorderNames_patient[j] <- combineDiseaseHGNC_patient
+      }
+    else{
+      noDiseaseID <- paste(verticalAxis_patient[(j-1)])#print message which ID cannot be found
+      next}
+  }
+}
+remove(i,j)
+#Save list on one string for reporting purposes
+ordered_disorderNames_patient <- do.call(paste, c(as.list(disorderNames_patient), sep = ", "))
+ordered_disorderNames_patient <- str_replace_all(ordered_disorderNames_patient, ' , ', ' ' )
+
+###Theoretical Biomarkers
+biomarkerNames_patient <- list()
+
+for (j in 1:length(horizontalAxis_patient)){
+  for (i in 1:nrow(df_figure_caption_biomarkers)){
+    if(df_figure_caption_biomarkers[i,2] == horizontalAxis_patient[j]){
+      combinebiomarkerHMDB_patient <- paste0(horizontalAxis_patient[j], ': ', df_figure_caption_biomarkers[i,1])
+       biomarkerNames_patient[j] <- combinebiomarkerHMDB_patient
+      }
+    else{next}
+  }
+}
+remove(i,j)
+#Save list on one string for reporting purposes
+ordered_biomarkerNames_patient <- do.call(paste, c(as.list(biomarkerNames_patient), sep = ", "))
+
+##Patient-specific Biomarkers
+compare_patient_to_theoreticalMarkers <- setdiff(horizontalAxis_patient, df_figure_caption_biomarkers[,2])
+
+biomarkerNames_patientspecific <- list()
+
+for (j in 1:length(compare_patient_to_theoreticalMarkers)){
+  for (i in 1:nrow(df_figure_caption_biomarkers)){
+    if(df_figure_caption_biomarkers[i,2] == compare_patient_to_theoreticalMarkers[j]){
+      combinebiomarkerHMDB_patientspecific <- paste0(compare_patient_to_theoreticalMarkers[j], ': ', df_figure_caption_biomarkers[i,1])
+       biomarkerNames_patientspecific[j] <- combinebiomarkerHMDB_patientspecific
+      }
+    else{next}
+  }
+}
+remove(i,j)
+#Save list on one string for reporting purposes
+ordered_biomarkerNames_patient <- do.call(paste, c(as.list(biomarkerNames_patient), sep = ", "))
+
+#df_figure_caption_biomarkers
+
+#Print Figure caption (sorted diseases and unsorted metabolites)
+paste("Protein names correspond to the following disorders:", ordered_disorderNames_patient)
+paste(". HMDB IDs resemble these metabolites:", ordered_biomarkerNames_patient)
+
+# Line to test if an ID cannot be linked to a disease name
+#paste("These diseases have no known name:", noDiseaseID)
 
 ```
 # 2.7 Pathway Selection
