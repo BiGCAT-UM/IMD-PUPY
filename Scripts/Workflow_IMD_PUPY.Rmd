@@ -177,7 +177,7 @@ remove(queryDatanodeContent, resultsDatanodeContent)
 queryInteractionContent <-
   "select distinct (str(?wpid) as ?pathway) (str(?title) as ?pathwayTitle) (count(distinct ?rheaIdInteraction) AS ?InteractionsInPWs)
 where {
-VALUES ?wpid {\'WP4224\' \'WP4225\' \'WP4571\'^^ \'WP4595\' \'WP4583\' \'WP4584\'}
+VALUES ?wpid {\'WP4224\' \'WP4225\' \'WP4571\' \'WP4595\' \'WP4583\' \'WP4584\'}
   ?interaction dcterms:identifier ?id ;
     dcterms:isPartOf ?pathwayRes .
   ?pathwayRes a wp:Pathway ;
@@ -344,7 +344,7 @@ item2 = " }
     		dcterms:isPartOf ?pathwayRes .
 
  ?pathwayRes a wp:Pathway ;
-             wp:organismName \'Homo sapiens\'^^xsd:string ; 
+             wp:organismName \'Homo sapiens\' ; 
     		dcterms:identifier ?wpid ;
     		dc:title ?title .
 }
@@ -369,7 +369,7 @@ SELECT DISTINCT ?chebiMetabolite WHERE {
   VALUES ?chebiMetabolite {"
 item2 = "}
   ?pathwayRes  a wp:Pathway ;
-             	wp:organismName 'Homo sapiens'^^xsd:string .
+             	wp:organismName 'Homo sapiens' .
   
   ?metabolite 	a wp:Metabolite ;
                 dcterms:identifier ?id ;
@@ -488,13 +488,13 @@ amount_biomarkers_mergedData <- nrow(unique(biomarkers_three[c(3)]))
 ## Print amount of unique diseases for each category:
 paste0("For these three classes of IMDs, ", amount_biomarkers_mergedData ," unique biomarkers were relevant for the sample matrix urine.")
 
-
-figure_caption_biomarkers = paste0(biomarkers_three$HMDB, ': ',biomarkers_three$Symptom)
-figure_caption_biomarkers <- unique(figure_caption_biomarkers)
-figure_caption_biomarkers <- paste(figure_caption_biomarkers, collapse = ', ')
-figure_caption_diseases = paste0(biomarkers_three$Protein_HGNC_name, ': ',biomarkers_three$Disorder)
-figure_caption_diseases <- unique(figure_caption_diseases)
-figure_caption_diseases <- paste(figure_caption_diseases, collapse = ', ')
+##Dynamic caption info:
+df_figure_caption_biomarkers <- biomarkers_three[,c(3,5)] # Combines biomarkers_three$Symptoms with biomarkers_three$HMDB
+df_figure_caption_biomarkers <- unique(df_figure_caption_biomarkers) #Only retain unique metabolite names and HMDB IDs.
+df_figure_caption_biomarkers <- na.omit(df_figure_caption_biomarkers) #remove any rows with NA-values
+df_figure_caption_disorders <- biomarkers_three[,c(2,1)] # Combines biomarkers_three$Protein_HGNC_name with biomarkers_three$Disorder
+df_figure_caption_disorders <- unique(df_figure_caption_disorders) #Only retain unique disorder names + HGNC names
+df_figure_caption_disorders <- na.omit(df_figure_caption_disorders) #remove any rows with NA-values
 
 relevant <- biomarkers_three[,c(2,5,6,8)]
 
@@ -617,9 +617,44 @@ knitr::include_graphics(filename)
 verticalAxis <- rev(rownames(matrix_protein.cast)[output$rowInd])
 horizontalAxis <- colnames(matrix_protein.cast)[output$colInd]
 
-#Print Figure caption (unsorted diseases and metabolites)
-paste("Protein names correspond to the following disorders:", figure_caption_diseases)
-paste(". HMDB IDs resemble these metabolites:", figure_caption_biomarkers)
+##New dynamic Figure captions:
+###Diseases
+disorderNames <- list()
+
+for (j in 1:length(verticalAxis)){
+  for (i in 1:nrow(df_figure_caption_disorders)){
+    if(df_figure_caption_disorders[i,1] == verticalAxis[j]){
+      combineDiseaseHGNC <- paste0(verticalAxis[j], ': ', df_figure_caption_disorders[i,2])
+       disorderNames[j] <- combineDiseaseHGNC
+      }
+    else{next}
+  }
+}
+remove(i,j)
+#Save list on one string for reporting purposes
+ordered_disorderNames <- do.call(paste, c(as.list(disorderNames), sep = ", "))
+
+###Biomarkers
+biomarkerNames <- list()
+
+for (j in 1:length(horizontalAxis)){
+  for (i in 1:nrow(df_figure_caption_biomarkers)){
+    if(df_figure_caption_biomarkers[i,2] == horizontalAxis[j]){
+      combinebiomarkerHMDB <- paste0(horizontalAxis[j], ': ', df_figure_caption_biomarkers[i,1])
+       biomarkerNames[j] <- combinebiomarkerHMDB
+      }
+    else{next}
+  }
+}
+remove(i,j)
+#Save list on one string for reporting purposes
+ordered_biomarkerNames <- do.call(paste, c(as.list(biomarkerNames), sep = ", "))
+
+#df_figure_caption_biomarkers
+
+#Print Figure caption (sorted diseases and unsorted metabolites)
+paste("Protein names correspond to the following disorders:", ordered_disorderNames)
+paste(". HMDB IDs resemble these metabolites:", ordered_biomarkerNames)
 
 remove(total_list_diseases, amount_biomarkers_matrixData, amount_biomarkers_mergedData, amount_diseases_matrixData, amount_diseases_purine, amount_diseases_pyrimidine, amount_diseases_urea, column_start, figure_caption_biomarkers, figure_caption_diseases, list_diseases_purine, list_diseases_pyrimidine, list_diseases_urea, not_covered_IMDs, total_amount_diseases)
 ```
@@ -717,7 +752,7 @@ item2 = "}
     		dcterms:isPartOf ?pathwayRes .
 
  ?pathwayRes a wp:Pathway ;
-             wp:organismName 'Homo sapiens'^^xsd:string ; 
+             wp:organismName 'Homo sapiens' ; 
     		dcterms:identifier ?wpid ;
     		dc:title ?title .
     		
@@ -775,7 +810,7 @@ item3 = "}
     		dcterms:isPartOf ?pathwayRes .
 
  ?pathwayRes a wp:Pathway ;
-             wp:organismName 'Homo sapiens'^^xsd:string ; 
+             wp:organismName 'Homo sapiens' ; 
     		dcterms:identifier ?wpid ;
     		dc:title ?title .
     		
@@ -842,7 +877,7 @@ item4 = "}
     		dcterms:isPartOf ?pathwayRes .
 
  ?pathwayRes a wp:Pathway ;
-             wp:organismName 'Homo sapiens'^^xsd:string ; 
+             wp:organismName 'Homo sapiens' ; 
     		dcterms:identifier ?wpid ;
     		dc:title ?title .
     		
