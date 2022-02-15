@@ -755,7 +755,7 @@ for (j in 1:length(verticalAxis_patient)){
        disorderNames_patient[j] <- combineDiseaseHGNC_patient
       }
     else{
-      noDiseaseID <- paste(verticalAxis_patient[(j-1)])#print message which ID cannot be found
+      #noDiseaseID <- paste(verticalAxis_patient[(j-1)])#print message which ID cannot be found
       next}
   }
 }
@@ -786,9 +786,9 @@ compare_patient_to_theoreticalMarkers <- setdiff(horizontalAxis_patient, df_figu
 biomarkerNames_patientspecific <- list()
 
 for (j in 1:length(compare_patient_to_theoreticalMarkers)){
-  for (i in 1:nrow(df_figure_caption_biomarkers)){
-    if(df_figure_caption_biomarkers[i,2] == compare_patient_to_theoreticalMarkers[j]){
-      combinebiomarkerHMDB_patientspecific <- paste0(compare_patient_to_theoreticalMarkers[j], ': ', df_figure_caption_biomarkers[i,1])
+  for (i in 1:nrow(df_figure_caption_biomarkers_patientspecific)){
+    if(df_figure_caption_biomarkers_patientspecific[i,2] == compare_patient_to_theoreticalMarkers[j]){
+      combinebiomarkerHMDB_patientspecific <- paste0(compare_patient_to_theoreticalMarkers[j], ': ', df_figure_caption_biomarkers_patientspecific[i,1])
        biomarkerNames_patientspecific[j] <- combinebiomarkerHMDB_patientspecific
       }
     else{next}
@@ -796,16 +796,16 @@ for (j in 1:length(compare_patient_to_theoreticalMarkers)){
 }
 remove(i,j)
 #Save list on one string for reporting purposes
-ordered_biomarkerNames_patient <- do.call(paste, c(as.list(biomarkerNames_patient), sep = ", "))
+ordered_biomarkerNames_patientspecific <- do.call(paste, c(as.list(biomarkerNames_patientspecific), sep = ", "))
 
 #df_figure_caption_biomarkers
 
 #Print Figure caption (sorted diseases and unsorted metabolites)
-paste("Protein names correspond to the following disorders:", ordered_disorderNames_patient)
-paste(". HMDB IDs resemble these metabolites:", ordered_biomarkerNames_patient)
+paste0("Protein names correspond to the following disorders: ", ordered_disorderNames_patient, ". ")
+paste0("HMDB IDs resemble these metabolites: ", ordered_biomarkerNames_patient, ". ")
+paste0("Additional biomarkers relevant for this specific patient (not part of IEMbase data): ", ordered_biomarkerNames_patientspecific, ". ")
 
-# Line to test if an ID cannot be linked to a disease name
-#paste("These diseases have no known name:", noDiseaseID)
+remove(biomarkerNames, biomarkerNames_patient, biomarkerNames_patientspecific, df_figure_caption_biomarkers, df_figure_caption_disorders, df_figure_caption_biomarkers_patientspecific, disorderNames, disorderNames_patient, horizontalAxis, horizontalAxis_patient, verticalAxis, verticalAxis_patient, ordered_biomarkerNames, ordered_biomarkerNames_patient, ordered_biomarkerNames_patientspecific, ordered_disorderNames, ordered_disorderNames_patient, compare_patient_to_theoreticalMarkers, combinebiomarkerHMDB, combinebiomarkerHMDB_patient, combinebiomarkerHMDB_patientspecific, combineDiseaseHGNC, combineDiseaseHGNC_patient)
 
 ```
 # 2.7 Pathway Selection
@@ -931,9 +931,10 @@ query_compatible_third <- as.list(paste("ch:", compare_SecondThird_CHEBI, sep=""
 string_CHEBI_third <- paste(query_compatible_third, collapse = ' ')
 remove(catch_chebis_secondPW,split_chebis_secondPW,split_string_CHEBI_second,cleaned_string_CHEBI_second,compare_SecondThird_CHEBI,query_compatible_third)
 
+#Removed protein output, query times out.
 item1 = "PREFIX ch:<https://identifiers.org/chebi/CHEBI:>
 PREFIX cur: <http://vocabularies.wikipathways.org/wp#Curation:>
-select distinct ?pathwayRes (str(?wpid) as ?pathway) (str(?title) as ?pathwayTitle) (count(distinct ?chebiMetabolite) AS ?CHEBIsInPWs) (count(distinct ?chebiMetaboliteSecond) AS ?CHEBIsInPWsSecond) (count(distinct ?chebiMetaboliteThird) AS ?CHEBIsInPWsThird) (GROUP_CONCAT(DISTINCT fn:substring(?hgnc,37);separator=' ') AS ?Proteins) (GROUP_CONCAT(DISTINCT fn:substring(?chebiMetabolite,37);separator=' ') AS ?includedCHEBIs)
+select distinct ?pathwayRes (str(?wpid) as ?pathway) (str(?title) as ?pathwayTitle) (count(distinct ?chebiMetabolite) AS ?CHEBIsInPWs) (count(distinct ?chebiMetaboliteSecond) AS ?CHEBIsInPWsSecond) (count(distinct ?chebiMetaboliteThird) AS ?CHEBIsInPWsThird) (GROUP_CONCAT(DISTINCT fn:substring(?chebiMetabolite,37);separator=' ') AS ?includedCHEBIs)
 where {
 VALUES ?chebiMetabolite {"
 
@@ -953,9 +954,6 @@ item4 = "}
              wp:organismName 'Homo sapiens' ; 
     		dcterms:identifier ?wpid ;
     		dc:title ?title .
-    		
- ?datanode2 wp:bdbHgncSymbol ?hgnc ;
-    		dcterms:isPartOf ?pathwayRes .
     		
   #?pathwayRes wp:ontologyTag cur:Reactome_Approved . 
   ?pathwayRes wp:ontologyTag cur:AnalysisCollection .   
@@ -984,46 +982,84 @@ print("Third best matching pathways are:")
 if(nrow(showresults_CombinePWs_Third) < 1){
 paste("No more pathway models found")
 }else if(nrow(showresults_CombinePWs_Third) < 5){
-print(showresults_CombinePWs_Third[1:nrow(showresults_CombinePWs_Third),c(2,3,4:6,8)])
-  }else{print(showresults_CombinePWs_Third[1:5,c(2,3,4:6,8)])}
+print(showresults_CombinePWs_Third[1:nrow(showresults_CombinePWs_Third),c(2,3,4:7)])
+  }else{print(showresults_CombinePWs_Third[1:5,c(2,3,4:7)])}
 
 ```
 Select 3nd most relevant pathways
 ```{r}
-
 if(nrow(showresults_CombinePWs_Third) < 1){
   third_selected_pathway = 0
 paste("Skipping this step")}else{
 third_selected_pathway = 1 ## Note for user: pick a different number here, if another pathway than the first is deemed most relevant (default is top pathway)
 }
 ```
-
 Fourth, find which biomarkers are not covered by top three.
 ```{r}
 #First, obtain all the ChEBI IDs of the third highest ranked pathway, compare these to the list of remaining markers and only retain the marker which weren't covered yet
 if(third_selected_pathway < 1){
-paste("Using IDs from step 2 iso step 3, relevant pathway models are:")}else{
+paste("Using IDs from step 2 iso step 3, relevant pathway models are:")
+split_string_CHEBI_Third <- as.list(strsplit(string_CHEBI_third, ' ')[[1]])
+ cleaned_string_CHEBI_Third <- as.list(str_replace(split_string_CHEBI_Third, "ch:", ""))
+##Using IDs from third step, if no third PWM is selected
+string_CHEBI_third_final <- paste(cleaned_string_CHEBI_Third, collapse = ', ')
+
+#Find names for IDs which are present in a pathway model (if two pathways were selected):
+CHEBI_missingNames_pathways_third <- glue::glue("CHEBI:{cleaned_string_CHEBI_Third}")
+missingNames_pathways_third <- list()
+for (j in 1:length(CHEBI_missingNames_pathways_third)){
+  for (i in 1:nrow(annotated_both_nozero)){
+    if(annotated_both_nozero[i,4] == CHEBI_missingNames_pathways_third[j]){
+       missingNames_pathways_third[j] <- annotated_both_nozero[i,3]
+      }
+    else{next}
+  }
+}
+remove(i,j)
+#Save list on one string for reporting purposes
+string_missingNames_pathways_third <- do.call(paste, c(as.list(missingNames_pathways_third), sep = ", "))
+
+  }else{
 catch_chebis_ThirdPW <- showresults_CombinePWs_Third[third_selected_pathway,7]
 split_chebis_ThirdPW <- as.list(strsplit(catch_chebis_ThirdPW, ' ')[[1]])
 split_string_CHEBI_Third <- as.list(strsplit(string_CHEBI_third, ' ')[[1]])
 cleaned_string_CHEBI_Third <- as.list(str_replace(split_string_CHEBI_Third, "ch:", ""))
+##Find IDs still missing after selecting top 3 pathway models.
 compare_ThirdFourth_CHEBI <- setdiff(cleaned_string_CHEBI_Third, split_chebis_ThirdPW)
-
 query_compatible_fourth <- as.list(compare_ThirdFourth_CHEBI, sep="")
 string_CHEBI_fourth <- paste(query_compatible_fourth, collapse = ', ')
-remove(catch_chebis_ThirdPW,split_chebis_ThirdPW,split_string_CHEBI_Third,cleaned_string_CHEBI_Third,compare_ThirdFourth_CHEBI,query_compatible_fourth)
+
+remove(catch_chebis_ThirdPW,split_string_CHEBI_Third,compare_ThirdFourth_CHEBI)
+
+#Find names for IDs which are present in a pathway model (if three pathways were selected):
+CHEBI_missingNames_pathways <- glue::glue("CHEBI:{query_compatible_fourth}")
+missingNames_pathways <- list()
+for (j in 1:length(CHEBI_missingNames_pathways)){
+  for (i in 1:nrow(annotated_both_nozero)){
+    if(annotated_both_nozero[i,4] == CHEBI_missingNames_pathways[j]){
+       missingNames_pathways[j] <- annotated_both_nozero[i,3]
+      }
+    else{next}
+  }
 }
+remove(i,j)
+#Save list on one string for reporting purposes
+string_missingNames_pathways <- do.call(paste, c(as.list(missingNames_pathways), sep = ", "))
+
+}
+
+#Print results selected pathways
 print(paste0(showresults_CombinePWs[first_selected_pathway,3], " (", showresults_CombinePWs[first_selected_pathway,2], ") [",  showresults_CombinePWs[first_selected_pathway,4], "]"))
 print(paste0(showresults_CombinePWs_Second[second_selected_pathway,3], " (", showresults_CombinePWs_Second[second_selected_pathway,2], ") [",  showresults_CombinePWs_Second[second_selected_pathway,4], "]"))
+
+#Print results not selected biomarkers
 if(third_selected_pathway == 0){
-  print(paste0("These identifiers are not captured in the top 3 pathways: ", string_CHEBI_third))
+  print(paste0("These identifiers are not captured in the top 2 pathways: ", string_CHEBI_third_final, ", with the following database names: ", string_missingNames_pathways_third))
 }else if(third_selected_pathway == 1){
 print(paste0(showresults_CombinePWs_Third[third_selected_pathway,3], " (", showresults_CombinePWs_Third[third_selected_pathway,2], ") [",  showresults_CombinePWs_Third[third_selected_pathway,4], "]"))
-  print(paste0("These identifiers are not captured in the top 3 pathways: ", string_CHEBI_fourth))
+  print(paste0("These identifiers are not captured in the top 3 pathways: ", string_CHEBI_fourth, ", with the following database names: ", string_missingNames_pathways))
 } else{print(paste0(showresults_CombinePWs_Third[third_selected_pathway,3], " (", showresults_CombinePWs_Third[third_selected_pathway,2], ")# [",  showresults_CombinePWs_Third[third_selected_pathway,4], "]"))
-  print(paste0("These identifiers are not captured in the top 3 pathways: ", string_CHEBI_fourth))}
-
-
+  print(paste0("These identifiers are not captured in the top 3 pathways: ", string_CHEBI_fourth, ", with the following database names: ", string_missingNames_pathways))}
 
 ```
 # 2.8 Data Visuzalization
