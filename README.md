@@ -2,7 +2,7 @@ You can find our website here: [bigcat-um.github.io/IMD-PUPY](https://bigcat-um.
 
 Welcome to the repository of the Inherited Metabolic Disorders Systems Biology workflow!
 This code repository contains:
-1. [R script](Scripts/Workflow_IMD_PUPY.Rmd) of the workflow, as presented in [this manuscript](preprint link)
+1. [R script](Scripts/Workflow_IMD_PUPY.Rmd) of the workflow, as presented in [this manuscript](https://doi.org/10.1101/2022.01.31.21265847)
 2. [R markdown Document](Scripts/Workflow_IMD_PUPY.html) showing the output of the script for an example patient
 3. [Expert interpretation](Expert_interpretation) for all patients (anonymized data available [here](Data/Data_PuPyMS_QTOF_KV_BIGCAT.csv))
 4. [Relevant Biomarker overlap](Images) and [Network visualization](Cytoscape_networks) for each individual patient.
