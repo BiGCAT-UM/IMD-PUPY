@@ -1192,8 +1192,9 @@ network1 <- exportImage(imageURL_Name,'PNG')
 ```
 
 ```{r}
-## This visualization only works for the HTML version online.
-knitr::include_graphics("https://github.com/BiGCAT-UM/IMD-PUPY/blob/main/Images/patient_I_network_First.png?raw=true")
+#Show the network as output in RMD file
+filenameFirst<- paste0(imageURL_Name, '.png')
+knitr::include_graphics(filenameFirst)
 ```
 ### Selecting the second pathway of choice
 
@@ -1213,7 +1214,6 @@ network2 <- exportImage(imageURL_Name,'PNG')
 ```
 
 ```{r}
-#knitr::include_graphics("https://github.com/BiGCAT-UM/IMD-PUPY/blob/main/Images/patient_I_network_Second.png?raw=true")
 #Show the network as output in RMD file
 filenameSecond <- paste0(imageURL_Name, '.png')
 knitr::include_graphics(filenameSecond)
@@ -1236,6 +1236,10 @@ setNodeColorMapping("log.Change", data.values, node.colors, default.color = "#AA
 #Download the Network as a PNG Figure, and store the figure in the Images folder.
 imageURL_Name <- paste0("Images/patient_",patientID,"_network_Third")
 network3 <- exportImage(imageURL_Name,'PNG')
+
+#Show the network as output in RMD file
+filenameThird <- paste0(imageURL_Name, '.png')
+knitr::include_graphics(filenameThird)
 
 }
 
