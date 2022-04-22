@@ -8,8 +8,10 @@ person("Irene", "Hemel", email = "i.hemel@maastrichtuniversity.nl, GitHub: Irene
        role = "ctb")
 ---
 
-# 2.1 Workflow Introduction 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+# 2.1 Workflow Introduction
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code.
+You can visit our main page at [bigcat-um.github.io/IMD-PUPY/](https://bigcat-um.github.io/IMD-PUPY/)
 
 ```{r setup, include=FALSE}
 if(!"rmarkdown" %in% installed.packages()){
@@ -28,13 +30,17 @@ knitr::opts_knit$set(root.dir = "~/git/IMD-PUPY")
 ```
 
 Check if the working directory is the top folder of the repository (called IMD)
+
 ```{r}
 getwd()
 ```
+
 # 2.2 Clinical Biomarker Data
 
 ### Loading patient specific data
+
 Note: this step requires input from the user, to select data from another patient as the example (QTOF_KV_184).
+
 ```{r}
 ## Load data for all patients
 patientdata <- read.csv("Data/Data_PuPyMS_QTOF_KV_BIGCAT.csv")
@@ -93,7 +99,9 @@ if(age >= 0 && age < 1){
 print(paste("Selected Patient ID is: " , patientID, ", age is between: ", agerange, " old"))
 
 ```
+
 ### Combine Reference + Patient data for each assay seperatly
+
 ```{r}
 #Load reference data (includes annotations for biomarkers)
 refvalues_PUPY <- read.delim("Data/Reference_values_PUPY_noNAs.txt")
@@ -117,8 +125,11 @@ remove(patient.column)
 print(paste("Relevant age data is selected for patient: " , patientID))
 
 ```
+
 # 2.3 Pathway Models
+
 Retrieve Metabolite, Protein and Disease Data from Pathway Models
+
 ```{r}
 
 if(!"SPARQL" %in% installed.packages()){
@@ -222,8 +233,11 @@ print(showresultsInteractionContent)
 print(showresultsDiseaseContent)
 
 ```
+
 # 2.4 Selection of Relevant Biomarkers
+
 First, the Patient data is connected to the reference data (including identifier mapping). Second, the annotated data is checked for missing values (NAs) and unification to ChEBI.
+
 ```{r}
 ## First, match the names of all biomarkers to an identifier (from reference value data, these mappings have been checked manually)
 library(dplyr) #needed for left_join() operation
@@ -271,7 +285,9 @@ print(paste("These biomarkers do not have an identfier mapping:" , paste(c(Missi
 print(paste("These biomarkers are not annotated with a ChEBI ID:" , paste(c(CHEBIMissing), collapse=', ' )))
   
 ```
+
 Second, comparing patient data to reference data to calculate the log(2) change value and data cleanup.
+
 ```{r}
 # First, convert the Patient Data column to a type "double" iso "character" (empty values will become "NA")
 names(annotated_both)[names(annotated_both) == patientID] <- "i.patientData" 
@@ -309,7 +325,9 @@ annotated_both_nozero <- annotated_both_nozero[order(-annotated_both_nozero$log.
 print(annotated_both_nozero[,c(1,3,4,9)], digits = 2)
 
 ```
+
 Third, find which relevant biomarkers are in a pathway model.
+
 ```{r}
 ##Add all IDs in a list
 CHEBI_IDs <- list()
@@ -361,7 +379,9 @@ remove(query_RelevantPWs,results_RelevantPWs)
 print(paste0("There are ", nrow(annotated_both_nozero) ," biomarkers relevant for patient " , patientID, ", with ChEBI-IDs: ", string_CHEBI, "."))
 
 ```
+
 Fourth, find which patient specific biomarkers are not in any pathway.
+
 ```{r}
 ##Find Missing Biomarkers (not part of any Human pathway model)
 item1 = "PREFIX ch:<https://identifiers.org/chebi/CHEBI:>
@@ -409,9 +429,11 @@ string_missingNames <- do.call(paste, c(as.list(missingNames), sep = ", "))
 if(length(intersectingCHEBI) == 0 ){print("All relevant biomarkers are in a pathway!")} else{
   print(paste0("These biomarkers (as ChEBI IDs) are not in a pathway: " , string_intersectingCHEBI, "; with the following Database names: ", string_missingNames))}
 ```
+
 # 2.5 Theoretical Biomarker Data
 
 Read in information from IEMBase (collected manually) and select only data relevant to sample matrix (urine) and age category (from patient)
+
 ```{r}
 biomarkers_purine_all <- read.table(file = 'Data/IEM_database_info_Purine.txt', sep = '\t', header = TRUE)
 biomarkers_pyrimidine_all <- read.table(file = 'Data/IEM_database_info_Pyrimidine.txt', sep = '\t', header = TRUE)
@@ -658,7 +680,9 @@ paste(". HMDB IDs resemble these metabolites:", ordered_biomarkerNames)
 
 remove(total_list_diseases, amount_biomarkers_matrixData, amount_biomarkers_mergedData, amount_diseases_matrixData, amount_diseases_purine, amount_diseases_pyrimidine, amount_diseases_urea, column_start, figure_caption_biomarkers, figure_caption_diseases, list_diseases_purine, list_diseases_pyrimidine, list_diseases_urea, not_covered_IMDs, total_amount_diseases)
 ```
+
 # 2.6 Relevant Biomarker Overlap
+
 ```{r}
 ## Obtain patient data
 patient_biomarker_data_HMDB <- annotated_both_nozero[,c(4,7,9)]
@@ -808,8 +832,11 @@ paste0("Additional biomarkers relevant for this specific patient (not part of IE
 remove(biomarkerNames, biomarkerNames_patient, biomarkerNames_patientspecific, df_figure_caption_biomarkers, df_figure_caption_disorders, df_figure_caption_biomarkers_patientspecific, disorderNames, disorderNames_patient, horizontalAxis, horizontalAxis_patient, verticalAxis, verticalAxis_patient, ordered_biomarkerNames, ordered_biomarkerNames_patient, ordered_biomarkerNames_patientspecific, ordered_disorderNames, ordered_disorderNames_patient, compare_patient_to_theoreticalMarkers, combinebiomarkerHMDB, combinebiomarkerHMDB_patient, combinebiomarkerHMDB_patientspecific, combineDiseaseHGNC, combineDiseaseHGNC_patient)
 
 ```
+
 # 2.7 Pathway Selection
+
 First, find relevant pathway from WikiPathways (sorted on covering most patient specific biomarkers)
+
 ```{r}
 #For now, filter out Reactome PWs due to visualization issues.
 item1 = "PREFIX ch:<https://identifiers.org/chebi/CHEBI:>
@@ -849,13 +876,16 @@ if(nrow(showresults_CombinePWs) < 5){
 print(showresults_CombinePWs_Second[1:nrow(showresults_CombinePWs_Second),c(2:4,6,5)])
 }else{print(showresults_CombinePWs[1:5,c(2:4,6,5)])}
 ```
+
 Select most relevant pathways
+
 ```{r}
 ## Note for user: pick a different number here, if another pathway than the first is deemed most relevant (default is top pathway)
 first_selected_pathway = 1
 ```
 
 Second, find second pathway covering most unique biomarkers:
+
 ```{r}
 #First, obtain all the ChEBI IDs of the first ranked pathway, compare these to the list of remaining markers and only retain the marker which weren't covered yet
 catch_chebis_firstPW <- showresults_CombinePWs[first_selected_pathway,6]
@@ -913,13 +943,16 @@ if(nrow(showresults_CombinePWs_Second) < 5){
 print(showresults_CombinePWs_Second[1:nrow(showresults_CombinePWs_Second),c(2,3,4,5,7)])
 }else{print(showresults_CombinePWs_Second[1:5,c(2,3,4,5,7)])}
 ```
+
 Select 2nd most relevant pathways
+
 ```{r}
 ## Note for user: pick a different number here, if another pathway than the first is deemed most relevant (default is top pathway)
 second_selected_pathway = 1
 ```
 
 Third, find third pathway covering most unique biomarkers:
+
 ```{r}
 #First, obtain all the ChEBI IDs of the second highest ranked pathway, compare these to the list of markers remaining and only retain the marker which weren't covered yet
 catch_chebis_secondPW <- showresults_CombinePWs_Second[second_selected_pathway,7]
@@ -986,7 +1019,9 @@ print(showresults_CombinePWs_Third[1:nrow(showresults_CombinePWs_Third),c(2,3,4:
   }else{print(showresults_CombinePWs_Third[1:5,c(2,3,4:7)])}
 
 ```
+
 Select 3nd most relevant pathways
+
 ```{r}
 if(nrow(showresults_CombinePWs_Third) < 1){
   third_selected_pathway = 0
@@ -994,7 +1029,9 @@ paste("Skipping this step")}else{
 third_selected_pathway = 1 ## Note for user: pick a different number here, if another pathway than the first is deemed most relevant (default is top pathway)
 }
 ```
+
 Fourth, find which biomarkers are not covered by top three.
+
 ```{r}
 #First, obtain all the ChEBI IDs of the third highest ranked pathway, compare these to the list of remaining markers and only retain the marker which weren't covered yet
 if(third_selected_pathway < 1){
@@ -1062,11 +1099,15 @@ print(paste0(showresults_CombinePWs_Third[third_selected_pathway,3], " (", showr
   print(paste0("These identifiers are not captured in the top 3 pathways: ", string_CHEBI_fourth, ", with the following database names: ", string_missingNames_pathways))}
 
 ```
+
 # 2.8 Data Visuzalization
 
 ## Preparation
+
 ### Installing and loading packages
-These packages need to be installed (and may take a while to run). 
+
+These packages need to be installed (and may take a while to run).
+
 ```{r}
 if(!"rWikiPathways" %in% installed.packages()){
     if (!requireNamespace("BiocManager", quietly = TRUE))
@@ -1094,24 +1135,32 @@ if(all(status)){
 ```
 
 ### Connect to cytoscape
-Open the Cytoscape Program first; this step was tested on version: 3.8.2, running on Java 11.0.11. 
+
+Open the Cytoscape Program first; this step was tested on version: 3.8.2, running on Java 11.0.11.
+
 ```{r}
 # Make sure to open cytoscape (>=3.8.2)
 cytoscapePing ()
 cytoscapeVersionInfo ()
 ```
+
 ### Install WikiPathways apps
-For the opening of pathway models and enhanced visualization steps, the WikiPathways app necessary. 
+
+For the opening of pathway models and enhanced visualization steps, the WikiPathways app necessary.
+
 ```{r}
 if("WikiPathways" %in% commandsHelp("")) print("Success: the WikiPathways app is installed") else print("Warning: WikiPathways app is not installed. Please install the WikiPathways app before proceeding.")
 if(!"WikiPathways" %in% commandsHelp("")){
   installApp("WikiPathways")
 }
 ```
+
 ### Open pathway from WikiPathways and Visualize patient data through log.Change
-Pathway models can be imported from WikiPathways with the WikiPathways apps (as pathway or network). Enabling the visualization of biomarkers scattered over several pathways, requires finding the optimal combination of two (or three) individual pathways, adding the data to these pathways and merging the results. 
+
+Pathway models can be imported from WikiPathways with the WikiPathways apps (as pathway or network). Enabling the visualization of biomarkers scattered over several pathways, requires finding the optimal combination of two (or three) individual pathways, adding the data to these pathways and merging the results.
 
 Determine the scale for fill color, and convert data to dataframe
+
 ```{r}
 #Determine highest up/downregulated value:
 highest <- max(annotated_both$log.Change)
@@ -1123,6 +1172,7 @@ finalData <- as.data.frame(annotated_both)
 ```
 
 The 2log transformed data can now be visualized on the nodes in the form of a color gradient from blue(downregulated) to white (0) to red (upregulated), just as the reference data.
+
 ```{r}
 #Select highest relevant pathway ID (containing most biomarkers) based on previous step.
 wp= commandsRun(paste0('wikipathways import-as-network id=', showresults_CombinePWs[first_selected_pathway,2])) #pick first PW to show data on.
@@ -1141,6 +1191,7 @@ setNodeColorMapping("log.Change", data.values, node.colors, default.color = "#AA
 ```
 
 ### Selecting the second pathway of choice
+
 ```{r}
 #Select secondly highest ranked relevant PW (manual for now):
 wp= commandsRun(paste0('wikipathways import-as-network id=', showresults_CombinePWs_Second[second_selected_pathway,2]))
@@ -1153,6 +1204,7 @@ setNodeColorMapping("log.Change", data.values, node.colors, default.color = "#AA
 ```
 
 ### Selecting the third pathway of choice
+
 ```{r}
 if(third_selected_pathway < 1){
   paste("skip this step, no third pathway selected")}else{
@@ -1167,32 +1219,44 @@ setNodeColorMapping("log.Change", data.values, node.colors, default.color = "#AA
 }
 
 ```
+
 ### Or, in case of Identifier Mapping issues:
+
 First, convert the XrefId data for Metabolites to ChEBIs, to avoid mismatching between patientData and IDs in Pathways (manual step).
+
 ```{r}
 #Install the BridgeDb App in Cytoscape
 installApp('BridgeDb')
 ```
 
 Now, go to Cytoscape and select: Apps/BridgeDb/Map Identifiers (see image below)
+
 ```{r}
 opts_knit$set(base.url='https://github.com/BiGCAT-UM/IMD/tree/main/Images/BridgeDbApp_location.png')
 ```
+
 Then, set up your mappings to work with the BridgeDb webservice; click on 'Manage ID Mapping Resources':
+
 ```{r}
 opts_knit$set(base.url='https://github.com/BiGCAT-UM/IMD/tree/main/Images/BridgeDbApp_mappingResource.png')
 ```
+
 Next, selecting the following settings (and click 'OK'):
+
 ```{r}
 opts_knit$set(base.url='https://github.com/BiGCAT-UM/IMD/tree/main/Images/BridgeDbApp_webserviceSelection.png')
 ```
+
 Last, select the following settings (example for HMDB mappings):
+
 ```{r}
 opts_knit$set(base.url='https://github.com/BiGCAT-UM/IMD/tree/main/Images/BridgeDbApp_mappingTask.png')
 ```
+
 You can now proceed to the next section.
 
 ### Load data on mapped column:
+
 ```{r}
 #Note: mapping column doesn't include "CHEBI:" in front of mapping
 finalData_noCHEBI <- finalData
@@ -1215,14 +1279,17 @@ setNodeColorMapping("log.Change", data.values, node.colors, default.color = "#AA
 ```
 
 ### Print missing biomarkers in visualisation
+
 ```{r}
 #TODO print which biomarkers are not visualized automatically (now manually selected); also add to final reporting step!
 missing_IDs  <- paste0(annotated_both_nozero[5,4], ", " , annotated_both_nozero[10,4])
 print(annotated_both_nozero[c(5,10),c(1,3,4,8)], digits = 2)
 ```
+
 # 2.9 Data Interpretation
 
 ### Finally: Print reporting details
+
 ```{r}
 ###Print overview of information for each patient
 print(paste("Selected Patient ID is: " , patientID, ", age is between: ", agerange, " old"))
