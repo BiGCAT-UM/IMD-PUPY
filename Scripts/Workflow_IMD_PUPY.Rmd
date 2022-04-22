@@ -1193,7 +1193,7 @@ network1 <- exportImage(imageURL_Name,'PNG')
 
 ```{r}
 ## This visualization only works for the HTML version online.
-knitr::include_graphics("https://github.com/BiGCAT-UM/IMD-PUPY/blob/main/Images/PatientI_network1.png?raw=true")
+knitr::include_graphics("https://github.com/BiGCAT-UM/IMD-PUPY/blob/main/Images/patient_I_network_First.png?raw=true")
 ```
 ### Selecting the second pathway of choice
 
@@ -1213,7 +1213,7 @@ network2 <- exportImage(imageURL_Name,'PNG')
 ```
 
 ```{r}
-knitr::include_graphics("https://github.com/BiGCAT-UM/IMD-PUPY/blob/main/Images/PatientI_network2.png?raw=true")
+knitr::include_graphics("https://github.com/BiGCAT-UM/IMD-PUPY/blob/main/Images/patient_I_network_Second.png?raw=true")
 ```
 
 ### Selecting the third pathway of choice
