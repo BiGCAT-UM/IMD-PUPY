@@ -1,20 +1,30 @@
 <!DOCTYPE html>
 <html lang="{{ site.lang | default: "en-US" }}">
   <head>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-169386346-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-169386346-1');
+    </script>
     <meta charset="UTF-8">
-    <header class="page-header" role="banner">
-      <h1><b>Inherited Metabolic Disorders Systems Biology workflow</b></h1>
-      <h2 class="project-tagline">Systems Biology framework using metabolic markers and pathways to support the diagnosis of Purine and Pyrimidine Inherited Metabolic Disorders</h2>
-    {% seo %}
+
+{% seo %}
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#1a17a9">
+    <meta name="theme-color" content="#157878">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
   </head>
   <body>
     <header class="page-header" role="banner">
+      <h1><b>Inherited Metabolic Disorders Systems Biology workflow</b></h1>
+      <h2 class="project-tagline">Systems Biology framework using metabolic markers and pathways to support the diagnosis of Purine and Pyrimidine Inherited Metabolic Disorderse</h2>
       <a href="/" class="btn">Home</a>
-      <a href="Scripts/Workflow_IMD_PUPY.nb.html" class="btn">Workflow Notebook</a>
+      <a href="Scripts/Workflow_IMD_PUPY.nb.htmls" class="btn">Workflow Notebook</a>
     </header>
 
     <main id="content" class="main-content" role="main">
