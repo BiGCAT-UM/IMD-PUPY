@@ -1175,8 +1175,8 @@ The 2log transformed data can now be visualized on the nodes in the form of a co
 #Select highest relevant pathway ID (containing most biomarkers) based on previous step.
 wp= commandsRun(paste0('wikipathways import-as-network id=', showresults_CombinePWs[first_selected_pathway,2])) #pick first PW to show data on.
 
-## IF error: "Error in loadTableData(finalData, data.key.column = "ID", table.key.column = "XrefId") : Failed to load data: Provided key columns do not contain any matches", execute mapping approach
-loadTableData(finalData, data.key.column = "ID", table.key.column = "XrefId")
+## Linking metabolic data to ChEBI-ID column
+loadTableData(finalData, data.key.column = "ID", table.key.column = "ChEBI")
 
 #Set range of data values for visualisation:
 data.values = c(-colorRange,-1,0,1,colorRange)
@@ -1194,7 +1194,7 @@ setNodeColorMapping("log.Change", data.values, node.colors, default.color = "#AA
 #Select secondly highest ranked relevant PW (manual for now):
 wp= commandsRun(paste0('wikipathways import-as-network id=', showresults_CombinePWs_Second[second_selected_pathway,2]))
 
-loadTableData(finalData, data.key.column = "ID", table.key.column = "XrefId")
+loadTableData(finalData, data.key.column = "ID", table.key.column = "ChEBI")
 
 #Update WikiPathways pallet with Patient Data:
 setNodeColorMapping("log.Change", data.values, node.colors, default.color = "#AAAAAA", style.name = "WikiPathways-As-Network")
@@ -1210,80 +1210,14 @@ if(third_selected_pathway < 1){
 #Select third highest ranked relevant PW (manual for now):
 wp= commandsRun(paste0('wikipathways import-as-network id=', showresults_CombinePWs_Third[third_selected_pathway,2]))
 
-loadTableData(finalData, data.key.column = "ID", table.key.column = "XrefId")
+loadTableData(finalData, data.key.column = "ID", table.key.column = "ChEBI")
 
 #Update WikiPathways pallet with Patient Data:
 setNodeColorMapping("log.Change", data.values, node.colors, default.color = "#AAAAAA", style.name = "WikiPathways-As-Network")
 }
 
 ```
-
-### Or, in case of Identifier Mapping issues:
-
-First, convert the XrefId data for Metabolites to ChEBIs, to avoid mismatching between patientData and IDs in Pathways (manual step).
-
-```{r}
-#Install the BridgeDb App in Cytoscape
-installApp('BridgeDb')
-```
-
-Now, go to Cytoscape and select: Apps/BridgeDb/Map Identifiers (see image below)
-
-```{r, echo=FALSE}
-# Define variable containing url
-url <- "https://github.com/BiGCAT-UM/IMD-PUPY/blob/main/Images/BridgeDbApp_location.png"
-```
-## Some cat!
-![](`r url`)
-
-```{r}
-opts_knit$set(base.url='https://github.com/BiGCAT-UM/IMD-PUPY/blob/main/Images/BridgeDbApp_location.png')
-```
-
-Then, set up your mappings to work with the BridgeDb webservice; click on 'Manage ID Mapping Resources':
-
-```{r}
-opts_knit$set(base.url='https://github.com/BiGCAT-UM/IMD-PUPY/blob/main/Images/BridgeDbApp_mappingResource.png')
-```
-
-Next, selecting the following settings (and click 'OK'):
-
-```{r}
-opts_knit$set(base.url='https://github.com/BiGCAT-UM/IMD-PUPY/blob/main/Images/BridgeDbApp_webserviceSelection.png')
-```
-
-Last, select the following settings (example for HMDB mappings):
-
-```{r}
-opts_knit$set(base.url='https://github.com/BiGCAT-UM/IMD-PUPY/blob/main/Images/BridgeDbApp_mappingTask.png')
-```
-
-You can now proceed to the next section.
-
-### Load data on mapped column:
-
-```{r}
-#Note: mapping column doesn't include "CHEBI:" in front of mapping
-finalData_noCHEBI <- finalData
-finalData_noCHEBI$IDCHEBI <-finalData$ID
-
-finalData_noCHEBI$IDCHEBI <- str_replace(finalData_noCHEBI$IDCHEBI, "CHEBI:", "ch:")
-finalData_noCHEBI$ID <- str_replace(finalData_noCHEBI$ID, "CHEBI:", "")
-
-#In case XrefId is not in chebi, map through bridgeDb app first (now manual) and then execute:
-#Result should be: [1] "Success: Data loaded in defaultnode table"
-loadTableData(finalData_noCHEBI, data.key.column = "ID", table.key.column = "ChEBI")
-
-#Set range of data values for visualisation:
-data.values = c(-colorRange,0,colorRange)
-#display.brewer.all(length(data.values), colorblindFriendly=TRUE, type="div") # div,qual,seq,all
-node.colors <- c(rev(brewer.pal(length(data.values), "RdBu")))
-
-#Update WikiPathways pallet with Patient Data:
-setNodeColorMapping("log.Change", data.values, node.colors, default.color = "#AAAAAA", style.name = "WikiPathways-As-Network")
-```
-
-### Print missing biomarkers in visualisation
+### Print missing biomarkers in visualization
 
 ```{r}
 #TODO print which biomarkers are not visualized automatically (now manually selected); also add to final reporting step!
