@@ -1,19 +1,26 @@
-<!DOCTYPE html>
-<html>
-<body>
-  
-<h1>Explore the data for this project here</h1>
-<p>Use the button below to select a Patient</p>
-
-<div class="dropdown">
-  <button>Dropdown</button>
-  <ul>
-    <li><a href="#">Item 1</a></li>
-    <li><a href="#">Item 2</a></li>
-    <li><a href="#">Item 3</a></li>
-    <li><a href="#">Item 4</a></li>
-  </ul>
-</div>
-  
-</body>
+<html>  
+<head>  
+<title>Explore the data for this project here</title>  
+</head>  
+<script>  
+function dropdownMenu() {  
+var list = document.getElementById("option");  
+document.getElementById("city").value = list.options[list.selectedIndex].text;  
+}  
+</script>  
+ 
+<body>  
+<form>  
+<b> Select a patient from the list</b>  
+<select id = "option" onchange = "dropdownMenu()" >  
+<option> ---Choose Patient--- </option>  
+<option> A </option>  
+<option> D </option>  
+<option> E </option>  
+<option> F </option>  
+</select>  
+<p> Your selected patient is:  
+<input type = "text" id = "city" size = "20" </p>  
+</form>  
+</body>  
 </html>
