@@ -1213,7 +1213,10 @@ network2 <- exportImage(imageURL_Name,'PNG')
 ```
 
 ```{r}
-knitr::include_graphics("https://github.com/BiGCAT-UM/IMD-PUPY/blob/main/Images/patient_I_network_Second.png?raw=true")
+#knitr::include_graphics("https://github.com/BiGCAT-UM/IMD-PUPY/blob/main/Images/patient_I_network_Second.png?raw=true")
+#Show the network as output in RMD file
+filenameSecond <- paste0(imageURL_Name, '.png')
+knitr::include_graphics(filenameSecond)
 ```
 
 ### Selecting the third pathway of choice
