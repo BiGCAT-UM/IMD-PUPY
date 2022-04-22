@@ -1,4 +1,4 @@
-You can find our website here: [bigcat-um.github.io/IMD-PUPY](https://bigcat-um.github.io/IMD-PUPY/) .
+Our website is located at [bigcat-um.github.io/IMD-PUPY](https://bigcat-um.github.io/IMD-PUPY/), and our GitHub page at [BiGCAT-UM/IMD-PUPY](https://github.com/BiGCAT-UM/IMD-PUPY) .
 
 Welcome to the repository of the Inherited Metabolic Disorders Systems Biology workflow!
 This code repository contains:
