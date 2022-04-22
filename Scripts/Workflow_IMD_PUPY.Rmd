@@ -1185,28 +1185,36 @@ node.colors <- c(rev(brewer.pal(length(data.values), "RdBu")))
 
 #Update WikiPathways pallet with Patient Data:
 setNodeColorMapping("log.Change", data.values, node.colors, default.color = "#AAAAAA", style.name = "WikiPathways-As-Network")
+
+#Download the Network as a PNG Figure, and store the figure in the Images folder.
+imageURL_Name <- paste0("Images/patient_",patientID,"_network_First")
+network1 <- exportImage(imageURL_Name,'PNG')
 ```
 
 ```{r}
+## This visualization only works for the HTML version online.
 knitr::include_graphics("https://github.com/BiGCAT-UM/IMD-PUPY/blob/main/Images/PatientI_network1.png?raw=true")
 ```
 ### Selecting the second pathway of choice
 
 ```{r}
 #Select secondly highest ranked relevant PW (manual for now):
-wp= commandsRun(paste0('wikipathways import-as-network id=', showresults_CombinePWs_Second[second_selected_pathway,2]))
+wp = commandsRun(paste0('wikipathways import-as-network id=', showresults_CombinePWs_Second[second_selected_pathway,2]))
 
 loadTableData(finalData, data.key.column = "ID", table.key.column = "ChEBI")
 
 #Update WikiPathways pallet with Patient Data:
 setNodeColorMapping("log.Change", data.values, node.colors, default.color = "#AAAAAA", style.name = "WikiPathways-As-Network")
 
+#Download the Network as a PNG Figure, and store the figure in the Images folder.
+imageURL_Name <- paste0("Images/patient_",patientID,"_network_Second")
+network2 <- exportImage(imageURL_Name,'PNG')
+
 ```
 
 ```{r}
 knitr::include_graphics("https://github.com/BiGCAT-UM/IMD-PUPY/blob/main/Images/PatientI_network2.png?raw=true")
 ```
-
 
 ### Selecting the third pathway of choice
 
@@ -1221,6 +1229,11 @@ loadTableData(finalData, data.key.column = "ID", table.key.column = "ChEBI")
 
 #Update WikiPathways pallet with Patient Data:
 setNodeColorMapping("log.Change", data.values, node.colors, default.color = "#AAAAAA", style.name = "WikiPathways-As-Network")
+
+#Download the Network as a PNG Figure, and store the figure in the Images folder.
+imageURL_Name <- paste0("Images/patient_",patientID,"_network_Third")
+network3 <- exportImage(imageURL_Name,'PNG')
+
 }
 
 ```
