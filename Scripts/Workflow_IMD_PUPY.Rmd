@@ -11,6 +11,7 @@ person("Irene", "Hemel", email = "i.hemel@maastrichtuniversity.nl, GitHub: Irene
 # 2.1 Workflow Introduction
 
 This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code.
+The online version displays the results for one Patient.
 You can visit our main page at [bigcat-um.github.io/IMD-PUPY/](https://bigcat-um.github.io/IMD-PUPY/)
 
 ```{r setup, include=FALSE}
@@ -27,11 +28,8 @@ library(dplyr)
 knitr::opts_chunk$set(echo = TRUE)
 #setwd("~/git/IMD")
 knitr::opts_knit$set(root.dir = "~/git/IMD-PUPY")
-```
 
-Check if the working directory is the top folder of the repository (called IMD)
-
-```{r}
+##Check if the working directory is the top folder of the repository (called IMD)
 getwd()
 ```
 
