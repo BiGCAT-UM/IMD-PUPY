@@ -1230,25 +1230,25 @@ installApp('BridgeDb')
 Now, go to Cytoscape and select: Apps/BridgeDb/Map Identifiers (see image below)
 
 ```{r}
-opts_knit$set(base.url='https://github.com/BiGCAT-UM/IMD/tree/main/Images/BridgeDbApp_location.png')
+opts_knit$set(base.url='https://github.com/BiGCAT-UM/IMD-PUPY/blob/main/Images/BridgeDbApp_location.png')
 ```
 
 Then, set up your mappings to work with the BridgeDb webservice; click on 'Manage ID Mapping Resources':
 
 ```{r}
-opts_knit$set(base.url='https://github.com/BiGCAT-UM/IMD/tree/main/Images/BridgeDbApp_mappingResource.png')
+opts_knit$set(base.url='https://github.com/BiGCAT-UM/IMD-PUPY/blob/main/Images/BridgeDbApp_mappingResource.png')
 ```
 
 Next, selecting the following settings (and click 'OK'):
 
 ```{r}
-opts_knit$set(base.url='https://github.com/BiGCAT-UM/IMD/tree/main/Images/BridgeDbApp_webserviceSelection.png')
+opts_knit$set(base.url='https://github.com/BiGCAT-UM/IMD-PUPY/blob/main/Images/BridgeDbApp_webserviceSelection.png')
 ```
 
 Last, select the following settings (example for HMDB mappings):
 
 ```{r}
-opts_knit$set(base.url='https://github.com/BiGCAT-UM/IMD/tree/main/Images/BridgeDbApp_mappingTask.png')
+opts_knit$set(base.url='https://github.com/BiGCAT-UM/IMD-PUPY/blob/main/Images/BridgeDbApp_mappingTask.png')
 ```
 
 You can now proceed to the next section.
