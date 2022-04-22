@@ -1134,17 +1134,17 @@ if(all(status)){
 
 ### Connect to cytoscape
 
-Open the Cytoscape Program first; this step was tested on version: 3.8.2, running on Java 11.0.11.
+Open the Cytoscape Program first; this step was tested on version: 3.9.1, running on Java 11.0.11.
 
 ```{r}
-# Make sure to open cytoscape (>=3.8.2)
+# Make sure to open cytoscape (>=3.9.1)
 cytoscapePing ()
 cytoscapeVersionInfo ()
 ```
 
 ### Install WikiPathways apps
 
-For the opening of pathway models and enhanced visualization steps, the WikiPathways app necessary.
+For the opening of pathway models and enhanced visualization steps, the WikiPathways app necessary (version 3.3.10).
 
 ```{r}
 if("WikiPathways" %in% commandsHelp("")) print("Success: the WikiPathways app is installed") else print("Warning: WikiPathways app is not installed. Please install the WikiPathways app before proceeding.")
@@ -1228,6 +1228,13 @@ installApp('BridgeDb')
 ```
 
 Now, go to Cytoscape and select: Apps/BridgeDb/Map Identifiers (see image below)
+
+```{r, echo=FALSE}
+# Define variable containing url
+url <- "https://github.com/BiGCAT-UM/IMD-PUPY/blob/main/Images/BridgeDbApp_location.png"
+```
+## Some cat!
+![](`r url`)
 
 ```{r}
 opts_knit$set(base.url='https://github.com/BiGCAT-UM/IMD-PUPY/blob/main/Images/BridgeDbApp_location.png')
