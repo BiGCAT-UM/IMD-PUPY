@@ -1188,6 +1188,10 @@ setNodeColorMapping("log.Change", data.values, node.colors, default.color = "#AA
 
 ```
 
+<center>
+![First Selected Network for Patient](~/git/IMD-PUPY/Images/PatientI_network1.png)
+</center>
+
 ### Selecting the second pathway of choice
 
 ```{r}
@@ -1200,6 +1204,9 @@ loadTableData(finalData, data.key.column = "ID", table.key.column = "ChEBI")
 setNodeColorMapping("log.Change", data.values, node.colors, default.color = "#AAAAAA", style.name = "WikiPathways-As-Network")
 
 ```
+<center>
+![Second Selected Network for Patient](~/git/IMD-PUPY/Images/PatientI_network2.png)
+</center>
 
 ### Selecting the third pathway of choice
 
