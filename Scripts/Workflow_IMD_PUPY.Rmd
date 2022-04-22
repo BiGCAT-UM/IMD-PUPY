@@ -1028,7 +1028,7 @@ third_selected_pathway = 1 ## Note for user: pick a different number here, if an
 }
 ```
 
-Fourth, find which biomarkers are not covered by top three.
+Fourth, find which biomarkers are not covered by top three (or two).
 
 ```{r}
 #First, obtain all the ChEBI IDs of the third highest ranked pathway, compare these to the list of remaining markers and only retain the marker which weren't covered yet
@@ -1106,7 +1106,7 @@ print(paste0(showresults_CombinePWs_Third[third_selected_pathway,3], " (", showr
 
 These packages need to be installed (and may take a while to run).
 
-```{r}
+```{r, echo = FALSE}
 if(!"rWikiPathways" %in% installed.packages()){
     if (!requireNamespace("BiocManager", quietly = TRUE))
         install.packages("BiocManager")
@@ -1137,7 +1137,7 @@ if(all(status)){
 Open the Cytoscape Program first; this step was tested on version: 3.9.1, running on Java 11.0.11.
 
 ```{r}
-# Make sure to open cytoscape (>=3.9.1)
+# Make sure to have Cytoscape started on your computer (>=3.9.1)
 cytoscapePing ()
 cytoscapeVersionInfo ()
 ```
