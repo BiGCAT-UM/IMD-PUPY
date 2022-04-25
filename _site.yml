@@ -6,6 +6,8 @@ navbar:
    href: index.html
   - text: "R Markdown Script"
    href: /Scripts/Workflow_IMD_PUPY.html
+  - test: "Data Viewer"     
+   href: Pages/data_viewer.html 
 output:
   html_document:
  theme: Cayman
