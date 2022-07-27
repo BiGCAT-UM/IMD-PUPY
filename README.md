@@ -1,4 +1,6 @@
-Our website is located at [bigcat-um.github.io/IMD-PUPY](https://bigcat-um.github.io/IMD-PUPY/), and our GitHub page at [BiGCAT-UM/IMD-PUPY](https://github.com/BiGCAT-UM/IMD-PUPY) .
+Our website is located at [bigcat-um.github.io/IMD-PUPY](https://bigcat-um.github.io/IMD-PUPY/), and our GitHub page at [BiGCAT-UM/IMD-PUPY](https://github.com/BiGCAT-UM/IMD-PUPY).
+
+This workflow has been developped as an RMarkdown script, in the R programming language (v4.1.3), tested through RStudio16 (v2022.02.2) on a Linux OS (Ubuntu 18.04).
 
 Welcome to the repository of the Inherited Metabolic Disorders Systems Biology workflow!
 This code repository contains:
