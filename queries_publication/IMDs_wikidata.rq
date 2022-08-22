@@ -1,0 +1,20 @@
+#Genes for PUPY+AA
+SELECT DISTINCT ?geneLabel ?proteinLabel ?disorderLabel
+WHERE
+{
+VALUES ?listPUPYAA {'ADA' 'ADSL' 'AGXT2' 'AMPD1' 'APRT' 'ARG1' 'ASL' 'ASS1' 'ATIC' 'CPS1' 'DGUOK' 'DHODH' 'DPYD' 'DPYS' 'HPRT1' 'IMPDH1' 'ITPA' 'NAGS' 'NT5C3A' 'OTC' 'PNP' '#PRPPs' 'PRPS1' 'RRM2B' 'SLC25A13' 'SLC25A15' 'TK2' 'TPMT' 'TYMP' 'UBP1' 'UMPS' '#XAN2' 'XDH' '#XO' 'MOCOS'}
+?gene wdt:P31 wd:Q7187. # Must be instance of gene
+?gene wdt:P703 wd:Q15978631 . # Found in taxon 'Homo sapiens' aka Human
+?gene wdt:P353 ?listPUPYAA .
+
+?gene wdt:P688 ?protein .
+?protein wdt:P705 ?check . #to avoid obtaining protein entries which are not part of UniProt's reviewed list.
+
+OPTIONAL{?gene wdt:P2293 ?disorder .
+?gene wdt:P2293 ?disorder .
+?disorder wdt:P279 ?type .
+?type wdt:P279 wd:Q1758393 .} #to only obtain disoders which are IMDs.
+
+SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". } # Helps get the label in your language, if not, then en language
+}
+ORDER BY ASC(?geneLabel)
