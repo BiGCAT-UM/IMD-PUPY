@@ -1,10 +1,11 @@
 Disorder 	OMIM	IEM ID	Test panel	Symptom	Measured in	HMDB	Uniprot ID	Mapping ChEBI	Neonatal (birth-1mth)	Infancy (1-18mths)	Childhood (1.5-11yrs)	Adolescence (11-16yrs)	Adulthood (>16yrs)	Present in pathway	Characteristic for disorder	Protein_HGNC_name
-Pyrimidine-5-nucleotidase I deficiency	https://omim.org/266120	IEMBASE154	Enzyme testing	Pyrimidine-5-nucleotidase I	Red blood cells		Q9H0P0	0	-3	-2	-3	-3	-3	Y	0	NT5C3A
-Pyrimidine-5-nucleotidase I deficiency	https://omim.org/266120	IEMBASE154	Purines and pyrimidines	Pyrimidine nucleotides	Red blood cells	HMDB0000262, HMDB0000630		1	3	3	3	3	3	Y	1	NT5C3A
-Pyrimidine-5-nucleotidase I deficiency	https://omim.org/266120	IEMBASE154	Specific tests	Glutathione	Red blood cells	HMDB0000125		1	-1 to n	-1 to n	-1 to n	-1 to n	-1 to n	N	1	NT5C3A
-Pyrimidine 5-nucleotidase superactivity	NA	IEMBASE156	Enzyme testing	Phosporibose pyrophosphate	Fibroblasts	HMDB0000280		1	-1	-1	NA	NA	NA		0	NT5C3A
-Pyrimidine 5-nucleotidase superactivity	NA	IEMBASE156	Enzyme testing	Uridine-5-monophosphate hydrolase	Fibroblasts		Q8TCD5	0	2	2	NA	NA	NA	Y	0	NT5C3A
-Pyrimidine 5-nucleotidase superactivity	NA	IEMBASE156	Routine tests	Uric acid	Urine	HMDB0000289		1	-1	-1	NA	NA	NA	N 	1	NT5C3A
+Pyrimidine-5’-nucleotidase I deficiency	https://omim.org/266120	IEMBASE154	Enzyme testing	Pyrimidine-5-nucleotidase I	Red blood cells		Q9H0P0	0	-3	-2	-3	-3	-3	Y	0	NT5C3A
+Pyrimidine-5’-nucleotidase I deficiency	https://omim.org/266120	IEMBASE154	Purines and pyrimidines	Pyrimidine nucleotides	Red blood cells	HMDB0000262		1	3	3	3	3	3	Y	1	NT5C3A
+Pyrimidine-5’-nucleotidase I deficiency	https://omim.org/266120	IEMBASE154	Purines and pyrimidines	Pyrimidine nucleotides	Red blood cells	HMDB0000630		1	3	3	3	3	3	Y	1	NT5C3A
+Pyrimidine-5’-nucleotidase I deficiency	https://omim.org/266120	IEMBASE154	Specific tests	Glutathione	Red blood cells	HMDB0000125		1	-1 to n	-1 to n	-1 to n	-1 to n	-1 to n	N	1	NT5C3A
+Pyrimidine 5’-nucleotidase superactivity	NA	IEMBASE156	Enzyme testing	Phosporibose pyrophosphate	Fibroblasts	HMDB0000280		1	-1	-1	NA	NA	NA		0	NT5C3A
+Pyrimidine 5’-nucleotidase superactivity	NA	IEMBASE156	Enzyme testing	Uridine-5-monophosphate hydrolase	Fibroblasts		Q8TCD5	0	2	2	NA	NA	NA	Y	0	NT5C3A
+Pyrimidine 5’-nucleotidase superactivity	NA	IEMBASE156	Routine tests	Uric acid	Urine	HMDB0000289		1	-1	-1	NA	NA	NA	N 	1	NT5C3A
 Dihydropyrimidine dehydrogenase deficiency	https://omim.org/274270	IEMBASE159	Enzyme testing	Dihydropyrimidine dehydrogenase	White blood cells		Q12882	0	-1	-1	-1	-1	-1	Y	0	DPYD
 Dihydropyrimidine dehydrogenase deficiency	https://omim.org/274270	IEMBASE159	Purines and pyrimidines	5-OH-Methyluracil	NA	HMDB0000469		1	2	2	2	2	2	N	1	DPYD
 Dihydropyrimidine dehydrogenase deficiency	https://omim.org/274270	IEMBASE159	Purines and pyrimidines	Thymine	Plasma	HMDB0000262		1	2	2	2	2	2	Y	1	DPYD
