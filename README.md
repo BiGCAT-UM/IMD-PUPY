@@ -4,10 +4,10 @@ This workflow has been developped as an RMarkdown script, in the R programming l
 
 Welcome to the repository of the Inherited Metabolic Disorders Systems Biology workflow!
 This code repository contains:
-1. [R script](Scripts/Workflow_IMD_PUPY.Rmd) of the workflow, as presented in [this manuscript](https://doi.org/10.1101/2022.01.31.21265847)
-2. [R markdown Document](Scripts/Workflow_IMD_PUPY.html) showing the output of the script for an example patient
-3. [Expert interpretation](Expert_interpretation) for all patients (anonymized data available [here](Data/Data_PuPyMS_QTOF_KV_BIGCAT.csv))
-4. [Relevant Biomarker overlap](Images) and [Network visualization](Cytoscape_networks) for each individual patient.
+1. [R script](https://github.com/BiGCAT-UM/IMD-PUPY/blob/main/Scripts/Workflow_IMD_PUPY.Rmd) of the workflow, as presented in [this manuscript](https://doi.org/10.1101/2022.01.31.21265847)
+2. [R markdown Document](Scripts/Workflow_IMD_PUPY.nb.html) showing the output of the script for an example patient
+3. [Expert interpretation](https://github.com/BiGCAT-UM/IMD-PUPY/tree/main/Expert_interpretation) for all patients (anonymized data available [here](https://github.com/BiGCAT-UM/IMD-PUPY/blob/main/Data/Data_PuPyMS_QTOF_KV_BIGCAT.csv))
+4. [Relevant Biomarker overlap](https://github.com/BiGCAT-UM/IMD-PUPY/tree/main/Images) and [Network visualization](https://github.com/BiGCAT-UM/IMD-PUPY/tree/main/Cytoscape_networks) for each individual patient.
 
 ![Fig1_MGM_PUPY _orphanet](https://user-images.githubusercontent.com/26277832/182803417-e3462a3d-e7ae-4daf-b81b-4dbc41b06868.jpg)
 
