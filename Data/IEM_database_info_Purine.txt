@@ -75,6 +75,8 @@ Deoxyguanosine kinase deficiency	https://omim.org/601465	IEMBASE143	Organic acid
 Deoxyguanosine kinase deficiency	https://omim.org/601465	IEMBASE143	Routine tests	Alpha-fetoprotein	S	NA			2	2	NA	NA	NA		1	DGUOK
 Deoxyguanosine kinase deficiency	https://omim.org/601465	IEMBASE143	Routine tests	Glucose	P	HMDB0000122			-3	-3	-1	NA	NA		1	DGUOK
 Deoxyguanosine kinase deficiency	https://omim.org/601465	IEMBASE143	Routine tests	Lactate	P	HMDB0001311			2	2	NA	NA	NA		1	DGUOK
-Deoxyguanosine kinase deficiency	https://omim.org/601465	IEMBASE143	Routine tests	Ferritin	S	HMDBP08672 HMDBP02077 HMDBP00470			2	2	NA	NA	NA		0	DGUOK
+Deoxyguanosine kinase deficiency	https://omim.org/601465	IEMBASE143	Routine tests	Ferritin	S	HMDBP08672			2	2	NA	NA	NA		0	DGUOK
+Deoxyguanosine kinase deficiency	https://omim.org/601465	IEMBASE143	Routine tests	Ferritin	S	HMDBP02077			2	2	NA	NA	NA		0	DGUOK
+Deoxyguanosine kinase deficiency	https://omim.org/601465	IEMBASE143	Routine tests	Ferritin	S	HMDBP00470			2	2	NA	NA	NA		0	DGUOK
 Deoxyguanosine kinase deficiency	https://omim.org/601465	IEMBASE143	Routine tests	Lactate	CSF	HMDB0001311			2	2	NA	NA	NA		0	DGUOK
 Deoxyguanosine kinase deficiency	https://omim.org/601465	IEMBASE143	Specifc tests	Histochemical cytochrome c oxidase deficiency	Mu	NA			NA	NA	NA	NA	1		0	DGUOK
