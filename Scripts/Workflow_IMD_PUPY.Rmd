@@ -437,23 +437,17 @@ biomarkers_purine_all <- read.table(file = 'Data/IEM_database_info_Purine.txt', 
 biomarkers_pyrimidine_all <- read.table(file = 'Data/IEM_database_info_Pyrimidine.txt', sep = '\t', header = TRUE)
 biomarkers_urea_all <- read.table(file = 'Data/IEM_database_info_Urea.txt', sep = '\t', header = TRUE)
 
-list_diseases_purine <- unique(biomarkers_purine_all[c(17)]) #list all unique disease protein names
-list_diseases_purine  <- list_diseases_purine[complete.cases(list_diseases_purine ), ] #Remove NA values
-amount_diseases_purine <- length(list_diseases_purine) #count all unique diseases
+#Summarize Purine disorders
+list_diseases_purine <- unique(na.omit(biomarkers_purine_all[c(17)])) #list all unique disease protein names,  #Remove NA values
+#Summarize Pyrimidine disorders
+list_diseases_pyrimidine <- unique(na.omit(biomarkers_pyrimidine_all[c(17)])) #list all unique disease protein names #Remove NA values
+#Summarize Urea Cycle disorders
+list_diseases_urea <- unique(na.omit(biomarkers_urea_all[c(17)])) #list all unique disease protein names #Remove NA values
 
-list_diseases_pyrimidine <- unique(biomarkers_pyrimidine_all[c(17)]) #list all unique disease protein names
-list_diseases_pyrimidine  <- list_diseases_pyrimidine [complete.cases(list_diseases_pyrimidine ), ] #Remove NA values
-amount_diseases_pyrimidine <- length(list_diseases_pyrimidine) #count all unique diseases
-
-list_diseases_urea <- unique(biomarkers_urea_all[c(17)]) #list all unique disease protein names
-list_diseases_urea  <- list_diseases_urea [complete.cases(list_diseases_urea ), ] #Remove NA values
-amount_diseases_urea <- length(list_diseases_urea) #count all unique diseases
-
-total_list_diseases <- c(list_diseases_purine, list_diseases_pyrimidine, list_diseases_urea)
-total_amount_diseases <- amount_diseases_purine + amount_diseases_pyrimidine + amount_diseases_urea
+total_list_diseases <- c(list_diseases_purine[[1]], list_diseases_pyrimidine[[1]], list_diseases_urea[[1]])
 
 ## Print amount of unique diseases for each category:
-paste0("In total, there were ", amount_diseases_purine ," unique purine, ", amount_diseases_pyrimidine, " pyrimidine and ", amount_diseases_urea, " urea cycle IMDs (total of ", total_amount_diseases ," disorders).")
+paste0("In total, there were ", length(list_diseases_purine[[1]]) ," unique purine, ", length(list_diseases_pyrimidine[[1]]), " pyrimidine and ", length(list_diseases_urea[[1]]), " urea cycle IMDs (total of ", length(total_list_diseases) ," disorders).")
 
 ##PUPY: (age in years)
 if(age >= 0 && age < 1){
@@ -503,10 +497,8 @@ for (i in 1:length((biomarkers_three$HMDB))) {
 }
 remove(i)
 
-amount_biomarkers_mergedData <- nrow(unique(biomarkers_three[c(3)]))
-
-## Print amount of unique diseases for each category:
-paste0("For these three classes of IMDs, ", amount_biomarkers_mergedData ," unique biomarkers were relevant for the sample matrix urine.")
+## Print amount of unique diseases and biomarkers:
+paste0("For these three classes of IMDs, ", nrow(unique(na.omit(biomarkers_three[c(5)]))) ," unique biomarkers were relevant for the sample matrix urine, representing ",  nrow(unique(na.omit(biomarkers_three[c(2)]))) , " unique disorders; " , sum(is.na(biomarkers_three[c(2)])), " disorder is missing a protein name.")
 
 ##Dynamic caption info:
 df_figure_caption_biomarkers <- biomarkers_three[,c(3,5)] # Combines biomarkers_three$Symptoms with biomarkers_three$HMDB
@@ -676,7 +668,7 @@ ordered_biomarkerNames <- do.call(paste, c(as.list(biomarkerNames), sep = ", "))
 paste("Protein names correspond to the following disorders:", ordered_disorderNames)
 paste(". HMDB IDs resemble these metabolites:", ordered_biomarkerNames)
 
-remove(total_list_diseases, amount_biomarkers_matrixData, amount_biomarkers_mergedData, amount_diseases_matrixData, amount_diseases_purine, amount_diseases_pyrimidine, amount_diseases_urea, column_start, ordered_biomarkerNames, ordered_disorderNames, list_diseases_purine, list_diseases_pyrimidine, list_diseases_urea, not_covered_IMDs, total_amount_diseases)
+remove(total_list_diseases, amount_biomarkers_matrixData, amount_diseases_matrixData, amount_diseases_purine, amount_diseases_pyrimidine, amount_diseases_urea, column_start, ordered_biomarkerNames, ordered_disorderNames, list_diseases_purine, list_diseases_pyrimidine, list_diseases_urea, not_covered_IMDs)
 ```
 
 # 2.6 Relevant Biomarker Overlap
