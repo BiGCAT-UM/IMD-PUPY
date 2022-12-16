@@ -486,7 +486,7 @@ biomarkers_three <- within(biomarkers_three, UpDown[UpDown == "n to 1"] <- ("0.5
 biomarkers_three <- within(biomarkers_three, UpDown[UpDown == "n"] <- ("0"))
 biomarkers_three <- within(biomarkers_three, UpDown[UpDown == "+-"] <- ("0"))
 
-biomarkers_three$UpDown <- as.integer(biomarkers_three$UpDown)
+biomarkers_three$UpDown <- as.numeric(biomarkers_three$UpDown)
 
 ##Convert old HMD's to new IDs:
 for (i in 1:length((biomarkers_three$HMDB))) {
@@ -668,7 +668,7 @@ ordered_biomarkerNames <- do.call(paste, c(as.list(biomarkerNames), sep = ", "))
 paste("Protein names correspond to the following disorders:", ordered_disorderNames)
 paste(". HMDB IDs resemble these metabolites:", ordered_biomarkerNames)
 
-remove(total_list_diseases, amount_biomarkers_matrixData, amount_diseases_matrixData, amount_diseases_purine, amount_diseases_pyrimidine, amount_diseases_urea, column_start, ordered_biomarkerNames, ordered_disorderNames, list_diseases_purine, list_diseases_pyrimidine, list_diseases_urea, not_covered_IMDs)
+remove(total_list_diseases, amount_biomarkers_matrixData, amount_diseases_matrixData, column_start, ordered_biomarkerNames, ordered_disorderNames, list_diseases_purine, list_diseases_pyrimidine, list_diseases_urea, not_covered_IMDs)
 ```
 
 # 2.6 Relevant Biomarker Overlap
@@ -712,13 +712,13 @@ title_name2 <- paste0("Biomarker overlap for three IMD types, \n age category: "
 
 # creates a 5 x 5 inch image
 png(filename2,    # create PNG for the heat map        
-  width = 5*300,        # 5 x 300 pixels
+  width = 5*400,        # 5 x 300 pixels
   height = 5*300,
   res = 280,            # 300 pixels per inch
   pointsize = 8)        # smaller font size
 
 output_patient <- heatmap.2(matrix_protein.cast_patient,
-  cellnote = round(matrix_protein.cast_patient,0),  # same data set for cell labels
+  cellnote = round(matrix_protein.cast_patient,1),  # same data set for cell labels, round off to 1 decimal.
   main = title_name2, # heat map title
   notecol="black",      # change font color of cell labels to black
   
@@ -734,8 +734,9 @@ output_patient <- heatmap.2(matrix_protein.cast_patient,
   col=my_palette,       # use on color palette defined earlier
   breaks=col_breaks,    # enable color transition at specified limits
   dendrogram="row",     # only draw a row dendrogram
-  Colv="NA")            # turn off column clustering
-
+  Colv="NA") #,            # turn off column clustering
+  #na.color = "Grey")   # color NA values specifically --> dOESN'T WORK :(
+  
 par(lend = 1)           # square line ends for the color legend
 legend("topright",      # location of the legend on the heatmap plot
     legend = c("Purine", "Pyrimidine", "Urea cycle", "Patient"), # category labels
@@ -819,7 +820,7 @@ paste0("Protein names correspond to the following disorders: ", ordered_disorder
 paste0("HMDB IDs resemble these metabolites: ", ordered_biomarkerNames_patient, ". ")
 paste0("Additional biomarkers relevant for this specific patient (not part of IEMbase data): ", ordered_biomarkerNames_patientspecific, ". ")
 
-remove(biomarkerNames, biomarkerNames_patient, biomarkerNames_patientspecific, df_figure_caption_biomarkers, df_figure_caption_disorders, df_figure_caption_biomarkers_patientspecific, disorderNames, disorderNames_patient, horizontalAxis, horizontalAxis_patient, verticalAxis, verticalAxis_patient, ordered_biomarkerNames_patient, ordered_biomarkerNames_patientspecific, ordered_disorderNames_patient, compare_patient_to_theoreticalMarkers, combinebiomarkerHMDB, combinebiomarkerHMDB_patient, combinebiomarkerHMDB_patientspecific, combineDiseaseHGNC, combineDiseaseHGNC_patient)
+#remove(biomarkerNames, biomarkerNames_patient, biomarkerNames_patientspecific, df_figure_caption_biomarkers, df_figure_caption_disorders, df_figure_caption_biomarkers_patientspecific, disorderNames, disorderNames_patient, horizontalAxis, horizontalAxis_patient, verticalAxis, verticalAxis_patient, ordered_biomarkerNames_patient, ordered_biomarkerNames_patientspecific, ordered_disorderNames_patient, compare_patient_to_theoreticalMarkers, combinebiomarkerHMDB, combinebiomarkerHMDB_patient, combinebiomarkerHMDB_patientspecific, combineDiseaseHGNC, combineDiseaseHGNC_patient)
 
 ```
 
