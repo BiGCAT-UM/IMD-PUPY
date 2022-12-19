@@ -512,6 +512,8 @@ relevant <- biomarkers_three[,c(2,5,6,8)]
 
 ##Remove rows with NA values anywhere
 relevant <- relevant[complete.cases(relevant), ]
+##Remove rows with zero values anywhere
+relevant <- relevant[apply(relevant!=0, 1, all),]
 
 #Keep unique diseases and category names
 diseases_categories <- relevant[,c(1,4)]
@@ -591,9 +593,10 @@ png(filename,    # create PNG for the heat map
   pointsize = 8)        # smaller font size
 
 output <- heatmap.2(matrix_protein.cast,
-  cellnote = matrix_protein.cast,  # same data set for cell labels
+  #cellnote = matrix_protein.cast,  # same data set for cell labels
   main = title_name, # heat map title
   notecol="black",      # change font color of cell labels to black
+  cellnote = ifelse(matrix_protein.cast != 0, matrix_protein.cast, ""), #Visualizing only label if data is not zero
   
   RowSideColors = c(    # grouping row-variables into different categories, e.g.
      rep("gray", lines_Category_Purine),   #  Purine diseases
@@ -677,6 +680,10 @@ remove(total_list_diseases, amount_biomarkers_matrixData, amount_diseases_matrix
 ## Obtain patient data
 patient_biomarker_data_HMDB <- annotated_both_nozero[,c(4,7,9)]
 patient_biomarker_data_HMDB <- patient_biomarker_data_HMDB[!(is.na(patient_biomarker_data_HMDB$HMDB) | patient_biomarker_data_HMDB$HMDB==""), ]
+#replace data smaller than 0.05 or -0.05 with NA
+patient_biomarker_data_HMDB$log.Change[findInterval(patient_biomarker_data_HMDB$log.Change, c(-0.05,0.05)) == 1L] <- NA
+# Remove all rows in the dataframe where the Change is NA .
+patient_biomarker_data_HMDB <- patient_biomarker_data_HMDB[complete.cases(patient_biomarker_data_HMDB$log.Change),]
 
 #Dynamic caption for patient specific biomarkers:
 df_figure_caption_biomarkers_patientspecific <- annotated_both_nozero[,c(3,7)] # Combines biomarkers_three$Symptoms with biomarkers_three$HMDB
@@ -705,6 +712,8 @@ rownames(patient_extension) <- patientLabel
 
 #Add patient data to matrix
 matrix_protein.cast_patient <- acast(rbind(melt(matrix_protein.cast), melt(patient_extension)), X1~X2, sum) 
+matrix_protein.cast_patient <- matrix_protein.cast_patient[apply(matrix_protein.cast_patient[,-1], 1, function(x) !all(x==0)),] #remove a row if all values are zero.
+matrix_protein.cast_patient <- matrix_protein.cast_patient[, colSums(matrix_protein.cast_patient != 0) > 0] #remove a column if all values are zero.
 
 #Create a file name specific for patientID
 filename2 <- paste0("Images/", patientID, "_heatmap.png")
@@ -712,18 +721,25 @@ title_name2 <- paste0("Biomarker overlap for three IMD types, \n age category: "
 
 # creates a 5 x 5 inch image
 png(filename2,    # create PNG for the heat map        
-  width = 5*400,        # 5 x 300 pixels
+  width = 5*400+nrow(patient_biomarker_data_HMDB)*30, # Updated based on high number of biomarkers for patient.
   height = 5*300,
   res = 280,            # 300 pixels per inch
   pointsize = 8)        # smaller font size
 
 output_patient <- heatmap.2(matrix_protein.cast_patient,
-  cellnote = round(matrix_protein.cast_patient,1),  # same data set for cell labels, round off to 1 decimal.
+  #cellnote = round(matrix_protein.cast_patient,0),  # same data set for cell labels, round off to 1 decimal.
   main = title_name2, # heat map title
   notecol="black",      # change font color of cell labels to black
+  cellnote = ifelse(matrix_protein.cast_patient != 0, round(matrix_protein.cast_patient,1), ""), #Visualizing only label if data is not zero
+  
+  #Color the space between the data points
+  sepwidth=c(0.01,0.01),
+  sepcolor="lightgray",
+  colsep=1:ncol(matrix_protein.cast_patient),
+  rowsep=1:nrow(matrix_protein.cast_patient),
   
   RowSideColors = c(    # grouping row-variables into different categories, e.g.
-     rep("gray", lines_Category_Purine),   #  Purine diseases
+     rep("grey", lines_Category_Purine),   #  Purine diseases
      rep("blue", lines_Category_Pyrimidine),    # Pyrimidine diseases
      rep("black", lines_Category_Urea),    # Urea diseases
      rep("purple", 1)) , #patientData
@@ -752,7 +768,7 @@ dev.off()               # close the PNG device
 #Show the heatmap as output in RMD file
 knitr::include_graphics(filename2)
 
-##To-Do: print names of metabolites added in heatmap originating from patient.
+##Print names of metabolites added in heatmap originating from patient.
 ## Clustering order might differ, so data needs to be reloaded:
 
 ##Obtain the order of the diseases and biomarkers as appearing in the clustered heatmap:
@@ -820,7 +836,7 @@ paste0("Protein names correspond to the following disorders: ", ordered_disorder
 paste0("HMDB IDs resemble these metabolites: ", ordered_biomarkerNames_patient, ". ")
 paste0("Additional biomarkers relevant for this specific patient (not part of IEMbase data): ", ordered_biomarkerNames_patientspecific, ". ")
 
-#remove(biomarkerNames, biomarkerNames_patient, biomarkerNames_patientspecific, df_figure_caption_biomarkers, df_figure_caption_disorders, df_figure_caption_biomarkers_patientspecific, disorderNames, disorderNames_patient, horizontalAxis, horizontalAxis_patient, verticalAxis, verticalAxis_patient, ordered_biomarkerNames_patient, ordered_biomarkerNames_patientspecific, ordered_disorderNames_patient, compare_patient_to_theoreticalMarkers, combinebiomarkerHMDB, combinebiomarkerHMDB_patient, combinebiomarkerHMDB_patientspecific, combineDiseaseHGNC, combineDiseaseHGNC_patient)
+remove(biomarkerNames, biomarkerNames_patient, biomarkerNames_patientspecific, df_figure_caption_biomarkers, df_figure_caption_disorders, df_figure_caption_biomarkers_patientspecific, disorderNames, disorderNames_patient, horizontalAxis, horizontalAxis_patient, verticalAxis, verticalAxis_patient, ordered_biomarkerNames_patient, ordered_biomarkerNames_patientspecific, ordered_disorderNames_patient, compare_patient_to_theoreticalMarkers, combinebiomarkerHMDB, combinebiomarkerHMDB_patient, combinebiomarkerHMDB_patientspecific, combineDiseaseHGNC, combineDiseaseHGNC_patient)
 
 ```
 
