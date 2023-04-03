@@ -1,55 +1,55 @@
-Dutch name	Database name	ID	0m-1m L	0m-1m U	1m-6m L	1m-6m U	6m-1y L	6m-1y U	1y-2y L	1y-2y U	2y-4y L	2y-4y U	4y-10y L	4y-10y U	10y-18y L	10y-18y U	18y+ L	18y+ U	HMDB
-s-sulfocysteine	S-sulfocysteine	CHEBI:27891	0	8	0	13	0	8	0	8.1	0	4	0	3	0	2	0	2	HMDB0000731
-taurine	Taurine	CHEBI:15891	8.4	979.3	21.9	1126.7	7	714.4	4.1	606.5	6	492	6.3	276.7	6.1	242.8	3	160.5	HMDB0000251
-fosfoethanolamine	Phosphoethanolamine	CHEBI:17553	0	58.4	0	47.6	0	43.3	0	44.8	0	21.9	0	15	0	11	0	6	HMDB0000224
-asparaginezuur	Aspartic Acid	CHEBI:17053	0	16.6	0	24.1	0	18.5	0	15.3	0	10.9	0	5	0	3.9	0	6	HMDB0000191
-hydroxyproline	Hydroxyproline	CHEBI:18095	12.2	422.4	8.2	394.2	0	32.8	0	18.6	0	7	0	3	0	2.9	0	4.1	HMDB0000725
-threonine	Threonine	CHEBI:16857	13.1	189.8	13.3	231.6	5.5	140.8	7.9	79	6	87.2	5	55.4	5	46	2	42.1	HMDB0000167
-serine	Serine	CHEBI:17115	15.6	443.8	2	430.8	7.3	246.2	33.5	189.2	21	186.1	18	105	10.5	84.6	1	65.9	HMDB0000187
-asparagine	Asparagine	CHEBI:17196	0.2	106.3	4.9	146.2	0	129	3	67.5	3.1	79.1	4	54.5	2.1	53	1	32.1	HMDB0000168
-glutaminezuur	Glutamic acid	CHEBI:18237	1	33.1	0	36.1	2.1	21.4	0	20.5	2	16.9	0.3	8.7	0.1	7	1	10	HMDB0000148
-glutamine	Glutamine	CHEBI:58359	26.2	345.5	48.5	473.7	53.1	333.4	35.1	286.6	32	265.1	25	171.7	21	124	6	90.3	HMDB0000641
-sarcosine	Sarcosine	CHEBI:15611	0	18.8	0	19.1	0	10	0	6.2	0	6	0	2	0	1.9	0	1	HMDB0000271
-alfa-amino-adipinezuur	2-Aminoadipic acid	CHEBI:37024	1.8	61.3	6.2	84.1	5.3	69.9	2	53.5	2	48.9	2	21.7	1.1	13	1	11	HMDB0000510
-proline	Proline	CHEBI:17203	7.2	197.9	4.8	117.3	0.6	20.4	0.9	26.2	1	14.7	0	6.7	0	3	0	6.1	HMDB0000162
-glycine	Glycine	CHEBI:15428	162.2	1773.7	171.2	1528.6	97.2	787.7	52.8	775.8	58.2	722.7	50.3	493.3	44.6	494.9	20.9	445.1	HMDB0000123
-alanine	Alanine	CHEBI:16977	31.8	334.7	51.7	411.8	19.3	245.1	19	184	13.1	182.4	9.6	106	8.1	97.4	7	72.1	HMDB0000161
-citrulline	Citrulline	CHEBI:57743	0	11.6	0	9.7	0	5.4	0	6.1	0	5.9	0	2.7	0	2	0	2	HMDB0000904
-alfa-aminoboterzuur	AABA	CHEBI:35621	0	7	0	12.7	0	6.4	0	8.2	0	6	0	5	0	3.9	0	2	
-valine	Valine	CHEBI:16414	2.1	26.4	1.4	29.7	1.9	22.5	1.9	23.1	3	19.9	2	14.4	2	7	1	7	HMDB0000883
-cystine	Cystine	CHEBI:16283	2	73.8	2	47.8	1.2	22.8	0	17.2	2	10.9	2	12.7	1.1	8	1	9	HMDB0000192
-saccharopine	Saccharopine	CHEBI:16927	0	9.5	0	8	0	4.8	0	9.1	0	3.9	0	2	0	1.9	0	1	HMDB0000279
-pipecolinezuur	Pipecolic acid	CHEBI:30913	0	28.4	0	21	0	14.8	0	10	0	14	0	10.7	0	8.9	0	9	HMDB0000070
-homocitrulline	Homocitrulline	CHEBI:58148	0	87.1	0	51.6	0	38	0	28.4	1	20	0	11	0	7	0	6	HMDB0000679
-methionine	Methionine	CHEBI:16811	0	8	0	8	0	8	0	6.1	0	5	0	3	0	2	0	2	HMDB0033951
-allo-isoleucine	Allo-Isoleucine	CHEBI:43433	0	3	0	3	0	1.8	0	1.1	0	1	0	1	0	1	0	1	HMDB0000557
-cystathionine	Cystathionine	CHEBI:17482	1	37.1	0	25.1	0	9.1	0	9	0	7	0	6.7	0	4	0	6.1	HMDB0000099
-isoleucine	Isoleucine	CHEBI:17191	0.2	12.1	0	17.3	0	8.4	0	9	0	6	0	4	0	2	0	2.1	HMDB0000172
-leucine	Leucine	CHEBI:15603	1.9	29.2	0	27.3	1.6	18.6	1.9	17.4	1	14.9	1.3	11.7	1	6	0	6	HMDB0000687
-argininobarnsteenzuur	Argininosuccinate	CHEBI:57472	0	13	0	13	0	13	0	14	0	8	0	6.7	0	5	0	4	HMDB0000052
-tyrosine	Tyrosine	CHEBI:17895	4	49.8	9.4	90.2	3.8	92.8	6.1	57.2	4.1	57.6	4	36.1	3	24.9	1	18	HMDB0000158
-beta-alanine	Beta-alanine	CHEBI:57966	0	12.5	0	12.5	0	7	0	5	0	7	0	5	0	6	0	4.1	HMDB0000056
-fenylalanine	Phenylalanine	CHEBI:17295	3	30	0	48.3	2	48.8	6.9	31.3	4	33.9	3	19.4	3	12.9	1.9	10	HMDB0000159
-delta-aminolevulinezuur	Aminolevulinic acid	CHEBI:17549	0	8.8	0	5	0	7.1	0	5.1	0	6.9	0	3.7	0	2	0	2	HMDB0001149
-beta-amino-isoboterzuur	(S)-Beta-aminoisobutyrate	CHEBI:57731	1	241.2	4	292	0.7	308.9	1.9	250.4	3	277	1	174.9	1	117.5	1	86.8	HMDB0002166
-homocystine	Homocystine	CHEBI:89698	0	2.5	0	4.3	0	2	0	3.2	0	1	0	1	0	0.9	0	0	HMDB0000676
-gamma-aminoboterzuur	GABA	CHEBI:16865	0	3	0	3	0	3	0	3	0	2	0	1	0	1	0	1	HMDB0000112
-ethanolamine	Monoethanolamine	CHEBI:16000	39.9	829.1	56.3	657.3	35.8	114	28.5	137.6	23.2	100.6	26.3	79.5	18	59.8	8	50	HMDB0000149
-hydroxylysine	Hydroxylysine	CHEBI:86498	0.9	30.1	0.9	30.1	0	10	0	9.1	0	9	0	6	0	4.9	0	3	HMDB0000450
-ornithine	Ornithine	CHEBI:46911	0	44.7	0	30.3	0	20.4	0	24.4	0	9.8	0	6	0	3	0	4	HMDB0000214
-lysine	Lysine	CHEBI:18019	12.5	310.4	6.1	190.8	4.1	79.3	4.1	79.3	3	65	3	52.6	2	41.4	1	40.1	HMDB0000182
-1-methyl-histidine	1-Methyl-histidine	CHEBI:50599	1.2	68.8	0	24.7	0	97.8	2.8	258	3	282.8	2	259.5	2	276.8	2	202.6	HMDB0000001
-histidine	Histidine	CHEBI:15971	28.4	391.5	36.7	526.9	56.5	513.1	46	450.1	33	452.7	22.3	314.8	18.9	249.6	9.9	155.6	HMDB0000177
-tryptofaan	Tryptophan	CHEBI:16828	0.5	35.1	4.7	63.5	6	46.3	2.8	36.4	4.1	31.5	3	23.7	2.1	15.9	1	12	HMDB0030396
-3-methyl-histidine	3-Methyl-histidine	CHEBI:27596	15.2	97.7	7.8	54.1	10.4	51.9	13.9	52	12	45	12.3	43.7	11	37	10.9	34.1	
-anserine	Anserine	CHEBI:18323	0	13.9	0	26.2	0	254	0	226.6	0	169.6	0	55.5	0	58.3	0	17	HMDB0000194
-carnosine	Carnosine	CHEBI:15727	3.1	129.4	8.5	238.5	7.1	233.5	6	142.6	1.1	113.8	1	55.3	0	31.1	0	9	HMDB0000033
-homocarnosine	Homocarnosine	CHEBI:85981	0	3	0	8	0	19.5	0	19.5	0	6.9	0	3	0	1.9	0	1	HMDB0000745
-arginine	Arginine	CHEBI:32682	0	32.3	0	38.3	0	30.4	0	20.2	0	13	0	10	0	7	0	1	HMDB0000517
-formimino-L-glutaminezuur	Formiminoglutamic acid	CHEBI:7274	1	13	0	19.3	0	13.4	0.9	10.1	0	6	0	4	0	2	0	3	HMDB0000854
-gly-pro	Gly-pro	CHEBI:70744	0	18.8	0	21	0	19.9	0	19.7	0	13	0	10	0	7	0	1	HMDB0000721
-N-aspartyl-glucosamine	N-Aspartylglucosamine	CHEBI:17261	0	6.8	0	7	0	7.4	0	8.7	0	4	0	3	0	2	0	2	HMDB0000489
-cyshcys			0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	
-piperideine-6-carbonzuur	Piperideine carboxylic acid	CHEBI:49015	0	2	0	2	0	2	0	2	0	2	0	2	0	2	0	2	HMDB0001084
-alfa-amino-adipic semialdehyde	a-Aminoadipate semialdehyde	CHEBI:61511	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HMDB0001263
-ASA_anhydride																			
+Dutch name	Database name	ID	0m-1m L	0m-1m U	1m-6m L	1m-6m U	6m-1y L	6m-1y U	1y-2y L	1y-2y U	2y-4y L	2y-4y U	4y-10y L	4y-10y U	10y-18y L	10y-18y U	18y+ L	18y+ U	HMDB	Alternative_ChEBI
+s-sulfocysteine	S-sulfocysteine	CHEBI:27891	0	8	0	13	0	8	0	8.1	0	4	0	3	0	2	0	2	HMDB0000731	
+taurine	Taurine	CHEBI:15891	8.4	979.3	21.9	1126.7	7	714.4	4.1	606.5	6	492	6.3	276.7	6.1	242.8	3	160.5	HMDB0000251	
+fosfoethanolamine	Phosphoethanolamine	CHEBI:17553	0	58.4	0	47.6	0	43.3	0	44.8	0	21.9	0	15	0	11	0	6	HMDB0000224	
+asparaginezuur	Aspartic Acid	CHEBI:17053	0	16.6	0	24.1	0	18.5	0	15.3	0	10.9	0	5	0	3.9	0	6	HMDB0000191	
+hydroxyproline	Hydroxyproline	CHEBI:18095	12.2	422.4	8.2	394.2	0	32.8	0	18.6	0	7	0	3	0	2.9	0	4.1	HMDB0000725	
+threonine	Threonine	CHEBI:16857	13.1	189.8	13.3	231.6	5.5	140.8	7.9	79	6	87.2	5	55.4	5	46	2	42.1	HMDB0000167	
+serine	Serine	CHEBI:17115	15.6	443.8	2	430.8	7.3	246.2	33.5	189.2	21	186.1	18	105	10.5	84.6	1	65.9	HMDB0000187	
+asparagine	Asparagine	CHEBI:17196	0.2	106.3	4.9	146.2	0	129	3	67.5	3.1	79.1	4	54.5	2.1	53	1	32.1	HMDB0000168	
+glutaminezuur	Glutamic acid	CHEBI:18237	1	33.1	0	36.1	2.1	21.4	0	20.5	2	16.9	0.3	8.7	0.1	7	1	10	HMDB0000148	
+glutamine	Glutamine	CHEBI:58359	26.2	345.5	48.5	473.7	53.1	333.4	35.1	286.6	32	265.1	25	171.7	21	124	6	90.3	HMDB0000641	
+sarcosine	Sarcosine	CHEBI:15611	0	18.8	0	19.1	0	10	0	6.2	0	6	0	2	0	1.9	0	1	HMDB0000271	
+alfa-amino-adipinezuur	2-Aminoadipic acid	CHEBI:37024	1.8	61.3	6.2	84.1	5.3	69.9	2	53.5	2	48.9	2	21.7	1.1	13	1	11	HMDB0000510	
+proline	Proline	CHEBI:17203	7.2	197.9	4.8	117.3	0.6	20.4	0.9	26.2	1	14.7	0	6.7	0	3	0	6.1	HMDB0000162	
+glycine	Glycine	CHEBI:15428	162.2	1773.7	171.2	1528.6	97.2	787.7	52.8	775.8	58.2	722.7	50.3	493.3	44.6	494.9	20.9	445.1	HMDB0000123	
+alanine	Alanine	CHEBI:16977	31.8	334.7	51.7	411.8	19.3	245.1	19	184	13.1	182.4	9.6	106	8.1	97.4	7	72.1	HMDB0000161	
+citrulline	Citrulline	CHEBI:57743	0	11.6	0	9.7	0	5.4	0	6.1	0	5.9	0	2.7	0	2	0	2	HMDB0000904	
+alfa-aminoboterzuur	AABA	CHEBI:35621	0	7	0	12.7	0	6.4	0	8.2	0	6	0	5	0	3.9	0	2		
+valine	Valine	CHEBI:16414	2.1	26.4	1.4	29.7	1.9	22.5	1.9	23.1	3	19.9	2	14.4	2	7	1	7	HMDB0000883	
+cystine	Cystine	CHEBI:16283	2	73.8	2	47.8	1.2	22.8	0	17.2	2	10.9	2	12.7	1.1	8	1	9	HMDB0000192	
+saccharopine	Saccharopine	CHEBI:16927	0	9.5	0	8	0	4.8	0	9.1	0	3.9	0	2	0	1.9	0	1	HMDB0000279	
+pipecolinezuur	Pipecolic acid	CHEBI:30913	0	28.4	0	21	0	14.8	0	10	0	14	0	10.7	0	8.9	0	9	HMDB0000070	
+homocitrulline	Homocitrulline	CHEBI:58148	0	87.1	0	51.6	0	38	0	28.4	1	20	0	11	0	7	0	6	HMDB0000679	
+methionine	Methionine	CHEBI:16811	0	8	0	8	0	8	0	6.1	0	5	0	3	0	2	0	2	HMDB0033951	
+allo-isoleucine	Allo-Isoleucine	CHEBI:43433	0	3	0	3	0	1.8	0	1.1	0	1	0	1	0	1	0	1	HMDB0000557	
+cystathionine	Cystathionine	CHEBI:17482	1	37.1	0	25.1	0	9.1	0	9	0	7	0	6.7	0	4	0	6.1	HMDB0000099	
+isoleucine	Isoleucine	CHEBI:17191	0.2	12.1	0	17.3	0	8.4	0	9	0	6	0	4	0	2	0	2.1	HMDB0000172	
+leucine	Leucine	CHEBI:15603	1.9	29.2	0	27.3	1.6	18.6	1.9	17.4	1	14.9	1.3	11.7	1	6	0	6	HMDB0000687	
+argininobarnsteenzuur	Argininosuccinate	CHEBI:57472	0	13	0	13	0	13	0	14	0	8	0	6.7	0	5	0	4	HMDB0000052	
+tyrosine	Tyrosine	CHEBI:17895	4	49.8	9.4	90.2	3.8	92.8	6.1	57.2	4.1	57.6	4	36.1	3	24.9	1	18	HMDB0000158	
+beta-alanine	Beta-alanine	CHEBI:57966	0	12.5	0	12.5	0	7	0	5	0	7	0	5	0	6	0	4.1	HMDB0000056	
+fenylalanine	Phenylalanine	CHEBI:17295	3	30	0	48.3	2	48.8	6.9	31.3	4	33.9	3	19.4	3	12.9	1.9	10	HMDB0000159	
+delta-aminolevulinezuur	Aminolevulinic acid	CHEBI:17549	0	8.8	0	5	0	7.1	0	5.1	0	6.9	0	3.7	0	2	0	2	HMDB0001149	
+beta-amino-isoboterzuur	(S)-Beta-aminoisobutyrate	CHEBI:57731	1	241.2	4	292	0.7	308.9	1.9	250.4	3	277	1	174.9	1	117.5	1	86.8	HMDB0002166	
+homocystine	Homocystine	CHEBI:89698	0	2.5	0	4.3	0	2	0	3.2	0	1	0	1	0	0.9	0	0	HMDB0000676	
+gamma-aminoboterzuur	GABA	CHEBI:16865	0	3	0	3	0	3	0	3	0	2	0	1	0	1	0	1	HMDB0000112	
+ethanolamine	Monoethanolamine	CHEBI:16000	39.9	829.1	56.3	657.3	35.8	114	28.5	137.6	23.2	100.6	26.3	79.5	18	59.8	8	50	HMDB0000149	
+hydroxylysine	Hydroxylysine	CHEBI:86498	0.9	30.1	0.9	30.1	0	10	0	9.1	0	9	0	6	0	4.9	0	3	HMDB0000450	
+ornithine	Ornithine	CHEBI:46911	0	44.7	0	30.3	0	20.4	0	24.4	0	9.8	0	6	0	3	0	4	HMDB0000214	
+lysine	Lysine	CHEBI:18019	12.5	310.4	6.1	190.8	4.1	79.3	4.1	79.3	3	65	3	52.6	2	41.4	1	40.1	HMDB0000182	
+1-methyl-histidine	1-Methyl-histidine	CHEBI:50599	1.2	68.8	0	24.7	0	97.8	2.8	258	3	282.8	2	259.5	2	276.8	2	202.6	HMDB0000001	
+histidine	Histidine	CHEBI:15971	28.4	391.5	36.7	526.9	56.5	513.1	46	450.1	33	452.7	22.3	314.8	18.9	249.6	9.9	155.6	HMDB0000177	
+tryptofaan	Tryptophan	CHEBI:16828	0.5	35.1	4.7	63.5	6	46.3	2.8	36.4	4.1	31.5	3	23.7	2.1	15.9	1	12	HMDB0030396	
+3-methyl-histidine	3-Methyl-histidine	CHEBI:27596	15.2	97.7	7.8	54.1	10.4	51.9	13.9	52	12	45	12.3	43.7	11	37	10.9	34.1		
+anserine	Anserine	CHEBI:18323	0	13.9	0	26.2	0	254	0	226.6	0	169.6	0	55.5	0	58.3	0	17	HMDB0000194	
+carnosine	Carnosine	CHEBI:15727	3.1	129.4	8.5	238.5	7.1	233.5	6	142.6	1.1	113.8	1	55.3	0	31.1	0	9	HMDB0000033	
+homocarnosine	Homocarnosine	CHEBI:85981	0	3	0	8	0	19.5	0	19.5	0	6.9	0	3	0	1.9	0	1	HMDB0000745	
+arginine	Arginine	CHEBI:32682	0	32.3	0	38.3	0	30.4	0	20.2	0	13	0	10	0	7	0	1	HMDB0000517	
+formimino-L-glutaminezuur	Formiminoglutamic acid	CHEBI:7274	1	13	0	19.3	0	13.4	0.9	10.1	0	6	0	4	0	2	0	3	HMDB0000854	
+gly-pro	Gly-pro	CHEBI:70744	0	18.8	0	21	0	19.9	0	19.7	0	13	0	10	0	7	0	1	HMDB0000721	
+N-aspartyl-glucosamine	N-Aspartylglucosamine	CHEBI:17261	0	6.8	0	7	0	7.4	0	8.7	0	4	0	3	0	2	0	2	HMDB0000489	
+cyshcys			0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		
+piperideine-6-carbonzuur	Piperideine carboxylic acid	CHEBI:49015	0	2	0	2	0	2	0	2	0	2	0	2	0	2	0	2	HMDB0001084	
+alfa-amino-adipic semialdehyde	a-Aminoadipate semialdehyde	CHEBI:61511	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HMDB0001263	
+ASA_anhydride																				
