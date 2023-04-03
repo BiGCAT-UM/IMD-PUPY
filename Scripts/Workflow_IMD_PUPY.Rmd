@@ -155,87 +155,88 @@ remove(queryMetadata, resultsMetadata)
 
 ## 2. Query Pathway data:
 
-##TODO: add biomarker models IDs!
-queryDatanodeContent <-
+##Pathway Models IDs of interest:
+pathways_of_Interest <- paste('"WP4224"', '"WP4225"', '"WP4571"', '"WP4595"', '"WP4583"', '"WP4584"')
+
+queryAllContent_1 <-
 "
-select distinct (str(?wpid) as ?pathway) (str(?title) as ?pathwayTitle) (count(distinct ?hgncIdProtein) AS ?ProteinsInPWs) (count(distinct ?chebiMetabolite) AS ?MetabolitesInPWs)
-where {
-VALUES ?wpid {\'WP4224\' \'WP4225\' \'WP4571\' \'WP4595\' \'WP4583\' \'WP4584\'}
-  ?datanode dcterms:identifier ?id ;
-    dcterms:isPartOf ?pathwayRes .
-  ?pathwayRes a wp:Pathway ;
-    dcterms:identifier ?wpid ;
-    dc:title ?title .
-  
-  {?datanode a wp:Protein ;          
-            wp:bdbHgncSymbol ?hgncIdProtein .}
-  UNION
-  {?datanode a wp:Metabolite ;          
-            wp:bdbChEBI ?chebiMetabolite .}
-  
-} ORDER BY ASC(?wpid)
+PREFIX wp:      <http://vocabularies.wikipathways.org/wp#>
+PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
 
-"
+#Variable selection
+SELECT DISTINCT (str(?title) as ?pathwayName) ?PWID 
+(count(distinct ?geneProduct) AS ?GenesInPWs)
+(count(distinct ?protein) AS ?ProteinsInPWs) 
+(count(distinct ?metaboliteNode) AS ?MetabolitesInPWs) 
+(count(distinct ?interactionID) AS ?RheaInPWs) 
+(count(distinct ?interactionMissing) AS ?NoRheaInPWs)
+(count(distinct ?omim) as ?diseaseIDs)
 
-resultsDatanodeContent <- SPARQL(endpointwp,queryDatanodeContent,curl_args=list(useragent=R.version.string))
-showresultsDatanodeContent <- resultsDatanodeContent$results
-remove(queryDatanodeContent, resultsDatanodeContent)
-
-## 3. Query interaction IDs
-
-queryInteractionContent <-
-  "select distinct (str(?wpid) as ?pathway) (str(?title) as ?pathwayTitle) (count(distinct ?rheaIdInteraction) AS ?InteractionsInPWs)
-where {
-VALUES ?wpid {\'WP4224\' \'WP4225\' \'WP4571\' \'WP4595\' \'WP4583\' \'WP4584\'}
-  ?interaction dcterms:identifier ?id ;
-    dcterms:isPartOf ?pathwayRes .
-  ?pathwayRes a wp:Pathway ;
-    dcterms:identifier ?wpid ;
-    dc:title ?title .
-  
-  {?interaction a wp:Interaction ;          
-            wp:bdbRhea ?rheaIdInteraction .}
-  
-} ORDER BY ASC(?wpid)"
-
-resultsInteractionContent <- SPARQL(endpointwp,queryInteractionContent,curl_args=list(useragent=R.version.string))
-showresultsInteractionContent <- resultsInteractionContent$results
-remove(queryInteractionContent, resultsInteractionContent)
-
-## 4. Query disease Datanodes 
-### Note: revision numbers might need updating, when query does not provide results.
-
-queryDiseaseContent <-
-"
-prefix wprdfp:      <http://rdf.wikipathways.org/Pathway/>
-
-SELECT ?wpid_revision  (count(distinct ?omim) as ?diseaseIDs)
 WHERE {
-VALUES ?wpid_revision {wprdfp:WP4224_r120400 wprdfp:WP4225_r120401 wprdfp:WP4571_r120383 wprdfp:WP4595_r120393}
-?pathway a wp:Pathway ;
-         dcterms:identifier ?wpid .
-?diseaseNode a gpml:Label;
-         dcterms:isPartOf ?wpid_revision ;
-         gpml:href ?omim .
-
-}ORDER BY ASC(?wpid_revision)
+  
+  VALUES ?PWID {
 "
-resultsDiseaseContent <- SPARQL(endpointwp,queryDiseaseContent,curl_args=list(useragent=R.version.string))
-showresultsDiseaseContent <- resultsDiseaseContent$results
-remove(queryDiseaseContent, resultsDiseaseContent)
+
+queryAllContent_2 <-
+"
+}
+    ?pathway dcterms:identifier ?PWID. #Obtain the ID
+    #?pathway wp:ontologyTag cur:IEM .
+    ?pathway wp:isAbout ?gpmlRDF_ID . #find the corresponding GPML link     
+    ?pathway dc:title ?title . #Obtain the title   
+
+      {
+    ?geneProduct dcterms:isPartOf ?pathway . #Only those part of PW             
+    ?geneProduct a wp:GeneProduct . #Filter for Protein DataNodes    
+    } 
+    UNION
+    {
+    ?protein dcterms:isPartOf ?pathway . #Only those part of PW             
+    ?protein a wp:Protein . #Filter for Protein DataNodes    
+    } 
+    UNION
+    { 
+    ?metaboliteNode a wp:Metabolite . #Filter for Metabolite DataNodes
+    ?metaboliteNode dcterms:isPartOf ?pathway . #Only those part of PW
+    }
+    UNION 
+    { 
+    OPTIONAL{?interaction wp:bdbRhea ?interactionID . #Find interactions with Rhea
+    ?interaction dcterms:isPartOf ?pathway .} #Only those part of PW
+    }
+    UNION
+    {
+    OPTIONAL{?interactionMissing dcterms:isPartOf ?pathway . #Additional interactions
+    ?interactionMissing rdf:type wp:Conversion . #Type 'metabolic conversion'
+    FILTER NOT EXISTS {?interactionMissing wp:bdbRhea ?interactionID . }#No Rhea   
+    }  
+    }
+    UNION {
+    ?diseaseNode dcterms:isPartOf ?gpmlRDF_ID . #Only check for matching pathways 
+    ?diseaseNode rdf:type gpml:Label . #Only include textLabels
+    ?diseaseNode gpml:href ?omim . #That have an href attribute  
+    FILTER regex(?omim, \"omim.org\", \"i\") #Only keep hrefs if they contain 'omim.org'
+    }
+      
+} ORDER BY ASC(?pathway)
+"
+queryAllContent <- paste(queryAllContent_1,pathways_of_Interest,queryAllContent_2)
+resultsAllContent <- SPARQL(endpointwp,queryAllContent,curl_args=list(useragent=R.version.string))
+showresultsAllContent <- resultsAllContent$results
+
+remove(queryAllContent, resultsAllContent)
 
 #Print results Table
 print(showresultsMetadata)
-print(showresultsDatanodeContent)
-print(showresultsInteractionContent)
-print(showresultsDiseaseContent)
+print(showresultsAllContent)
 
+remove(pathways_of_Interest, queryAllContent_1, queryAllContent_2)
 ```
 
 # 2.4 Selection of Relevant Biomarkers
 
 First, the Patient data is connected to the reference data (including identifier mapping). Second, the annotated data is checked for missing values (NAs) and unification to ChEBI.
-
 ```{r}
 ## First, match the names of all biomarkers to an identifier (from reference value data, these mappings have been checked manually)
 library(dplyr) #needed for left_join() operation
@@ -284,8 +285,66 @@ print(paste("These biomarkers are not annotated with a ChEBI ID:" , paste(c(CHEB
   
 ```
 
-Second, comparing patient data to reference data to calculate the log(2) change value and data cleanup.
+Second, query which biomarkers measured in the assays are not in any pathway model:
+```{r}
+allBiomarkers <- annotated_both$ID ##Take the ID column for all data
+allBiomarkers <- allBiomarkers[grepl("^CHEBI:", allBiomarkers)] #remove Is not starting with 'CHEBI:' for consistency
+library(stringr)
+cleaned_CHEBI_all <- str_replace(allBiomarkers, "CHEBI:", "ch:") #update IDs to work with SPARQL query
+#supercleaned_CHEBI <- str_replace(vector_CHEBI, "CHEBI:", "") #update IDs to work with SPARQL query
+string_CHEBI_all <- paste(c(cleaned_CHEBI_all), collapse=' ' )
+remove (cleaned_CHEBI_all)
 
+item1 = "PREFIX ch:<https://identifiers.org/chebi/CHEBI:>
+SELECT DISTINCT ?chebiMetabolite WHERE {
+  VALUES ?chebiMetabolite {"
+item2 = "}
+  ?pathwayRes  a wp:Pathway ;
+             	wp:organismName \'Homo sapiens\' .
+  
+  ?metabolite 	a wp:Metabolite ;
+                dcterms:identifier ?id ;
+                dcterms:isPartOf ?pathwayRes .
+
+  ?metabolite wp:bdbChEBI ?chebiMetabolite.
+}"
+
+queryMissingBiomarkers_all <- paste(item1,string_CHEBI_all,item2)
+remove(item1,item2)
+
+resultsMissingBiomarkers_all <- SPARQL(endpointwp,queryMissingBiomarkers_all,curl_args=list(useragent=R.version.string))
+listMissingBiomarkers_all <- c(resultsMissingBiomarkers_all$results) #safe results as list for comparison.
+remove(queryMissingBiomarkers_all,resultsMissingBiomarkers_all)
+
+CHEBI_inPWs_all <- gsub("[<https://identifiers.org/chebi/CHEBI:>]", "", listMissingBiomarkers_all) #ChEBI IDs Results IRI cleanup
+CHEBI_inQuery_all <- gsub("CHEBI:", "", allBiomarkers) #ChEBI IDs Query cleanup
+intersectingCHEBI_all <- setdiff(CHEBI_inQuery_all,CHEBI_inPWs_all)
+string_intersectingCHEBI_all <- paste(c(intersectingCHEBI_all), collapse=', ' )
+#count_biomarkers <- sapply(strsplit(string_CHEBI, " "), length)
+
+#Find names for missing Biomarkers based on ChEBI ID (to help with data curation)
+CHEBI_intersectingCHEBI_all <- paste0("CHEBI:", intersectingCHEBI_all) #update IDs to match back to data again
+missingNames_all <- list()
+for (j in 1:length(CHEBI_intersectingCHEBI_all)){
+  for (i in 1:nrow(annotated_both)){
+    if(annotated_both[i,4] == CHEBI_intersectingCHEBI_all[j]){
+       missingNames_all[j] <- annotated_both[i,3]
+      }
+    else{next}
+  }
+}
+remove(i,j)
+#Save list on one string for reporting purposes
+string_missingNames_all <- do.call(paste, c(as.list(missingNames_all), sep = ", "))
+
+#Print relevant information:
+if(length(intersectingCHEBI_all) == 0 ){print("All biomarkers on the assay(s) are in a pathway!")} else{
+  print(paste0("These biomarkers (as ChEBI IDs) are not in any pathway: " , string_intersectingCHEBI_all, "; with the following Database names: ", string_missingNames_all))}
+
+remove(allBiomarkers, CHEBI_inPWs_all, CHEBI_inQuery_all, CHEBI_intersectingCHEBI_all, intersectingCHEBI_all, string_CHEBI_all, string_intersectingCHEBI_all, string_missingNames_all, missingNames_all, CHEBIMissing)
+```
+
+Third, comparing patient data to reference data to calculate the log(2) change value and data cleanup.
 ```{r}
 # First, convert the Patient Data column to a type "double" iso "character" (empty values will become "NA")
 names(annotated_both)[names(annotated_both) == patientID] <- "i.patientData" 
@@ -324,8 +383,7 @@ print(annotated_both_nozero[,c(1,3,4,9)], digits = 2)
 
 ```
 
-Third, find which relevant biomarkers are in a pathway model.
-
+Fourth, find which relevant biomarkers are in a pathway model.
 ```{r}
 ##Add all IDs in a list
 CHEBI_IDs <- list()
@@ -378,8 +436,7 @@ print(paste0("There are ", nrow(annotated_both_nozero) ," biomarkers relevant fo
 
 ```
 
-Fourth, find which patient specific biomarkers are not in any pathway.
-
+Fifth, find which patient specific biomarkers are not in any pathway.
 ```{r}
 ##Find Missing Biomarkers (not part of any Human pathway model)
 item1 = "PREFIX ch:<https://identifiers.org/chebi/CHEBI:>
